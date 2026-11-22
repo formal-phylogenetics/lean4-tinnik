@@ -9,6 +9,7 @@ public import TreeOfBlobs.Defs
 public import TreeOfBlobs.External.Rhodes2020.Theorem2
 public import Phylogenetics.NMSC.Analytic
 public import Phylogenetics.NMSC.Basic
+public import Phylogenetics.Network.CutHierarchy
 public import Phylogenetics.Network.DeletedArcs
 public import TreeOfBlobs.Testing.Limits
 public import Phylogenetics.Tree.Metric

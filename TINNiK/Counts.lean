@@ -5,6 +5,7 @@ public import TreeOfBlobs.Defs
 public import TreeOfBlobs.Testing.Defs
 public import TreeOfBlobs.TreeCounts
 public import Phylogenetics.Tree.Splits
+public import Phylogenetics.Network.CutHierarchy
 public import TINNiK.Basic
 
 /-!

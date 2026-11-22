@@ -6,6 +6,7 @@ public import Phylogenetics.NMSC.Defs
 public import TreeOfBlobs.Testing.Defs
 public import TreeOfBlobs.Testing.IID
 public import Phylogenetics.Tree.NeighborJoining
+public import Phylogenetics.Network.CutHierarchy
 public import TINNiK.Basic
 public import TINNiK.Counts
 

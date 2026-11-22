@@ -7,6 +7,7 @@ public import TreeOfBlobs.Defs
 public import TreeOfBlobs.External.MitchellAllmanRhodes2019.T3Test
 public import TreeOfBlobs.External.Rhodes2020.Theorem2
 public import Phylogenetics.NMSC.Basic
+public import Phylogenetics.Network.CutHierarchy
 public import TreeOfBlobs.Testing.Tails
 public import Phylogenetics.Tree.Metric
 public import TINNiK.Basic

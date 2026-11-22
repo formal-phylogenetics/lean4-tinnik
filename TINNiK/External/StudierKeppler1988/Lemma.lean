@@ -1,6 +1,7 @@
 module
 
 public import Phylogenetics.Tree.NeighborJoining
+public import Phylogenetics.Network.CutHierarchy
 public import Mathlib.Tactic.FinCases
 public import Mathlib.Algebra.BigOperators.Fin
 
