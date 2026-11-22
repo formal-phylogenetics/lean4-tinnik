@@ -11,8 +11,8 @@ A quartet distance built from these sets and from the topologies inferred on the
 neighbor joining, give a weighted tree, whose internal edges shorter than a cutoff are contracted. The main result,
 Theorem 4, says that under the network multispecies coalescent, for generic parameters on a binary network, there are
 test levels for which the algorithm returns the tree of blobs with probability tending to one as the number of gene
-trees grows. The formalization is unconditional: no result of the literature is assumed. This paper is part of a
-collection of four formalizations on the tree of blobs, described in [lean4-tob](https://github.com/vltanh/lean4-tob), the hub of these papers.
+trees grows. The formalization is unconditional: no result of the literature is assumed. This paper is one of the
+four on the tree of blobs of the hub [lean4-tob](https://github.com/vltanh/lean4-tob), which presents them.
 
 ## What is proved
 
@@ -28,16 +28,16 @@ From the header of [the report](REPORT.md):
   an algorithm in Section 5 of Allman et al. 2023, which TINNiK develops. One sequence of levels, independent of the
   network and the parameters, also serves ([`TINNiK.theorem4_explicit`](TINNiK/Basic.lean#L657)).
 - The cited results: TINNiK's Theorems 1 and 2 and the combinatorial part of its Theorem 3, which come from Allman et
-  al. 2023, in [`lean4-allman2023/AllmanEtAl2023/`](https://github.com/vltanh/lean4-allman2023/tree/main/AllmanEtAl2023) ([its folder](https://github.com/vltanh/lean4-allman2023/blob/main/README.md)); Rhodes
+  al. 2023, in [`lean4-allman2023/AllmanEtAl2023/`](https://github.com/vltanh/lean4-allman2023/tree/main/AllmanEtAl2023) ([its README](https://github.com/vltanh/lean4-allman2023/blob/main/README.md)); Rhodes
   2020, Theorem 2; Mitchell et al. 2019, Theorem 3.1 for the cut model and Propositions 4.1, 4.2, 5.1, 5.2; that
   neighbor joining is exact on tree metrics, and Buneman's four-point theorem, in the library
   [lean4-phylogenetics](https://github.com/vltanh/lean4-phylogenetics); and that the Lemma of Studier and Keppler 1988
   fails at a polytomy. Nothing is assumed.
 - `lake build` passes with no warnings, and there is no `sorry`, `axiom`, `native_decide` or `implemented_by` in
-  [`lean4-tob/`](https://github.com/vltanh/lean4-tob). [`scripts/Audit.lean`](scripts/Audit.lean) checks every declaration of the project and of
-  the library, including private and generated ones, against the standard axioms [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice),
-  [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound); [Building](#building) says how to run it. Lean's kernel, NanoDa and con-ron accept the eight main
-  theorems.
+  this repository. [`scripts/Audit.lean`](scripts/Audit.lean) checks every declaration of this repository and of
+  the libraries it requires, including private and generated ones, against the standard axioms [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice),
+  [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound); [Building](#building) says how to run it. Lean's kernel, NanoDa and con-ron accepted the eight main
+  theorems in lean4-tob, before the split, and haven't been run on them here since.
 - No person has reviewed the proofs.
 
 ## The main results
@@ -70,12 +70,12 @@ each with a docstring in plain terms, and proves them from the libraries. They k
 
 ## Palomar
 
-No submission to [Palomar](https://github.com/mathlib-initiative) is planned. [`palomar/`](.) keeps the files in
+No submission to [Palomar](https://github.com/mathlib-initiative) is planned. This repository keeps the files in
 case that changes:
 
-- [`palomar/comparator.json`](comparator.json) runs Comparator on the eight main theorems, with
+- [`comparator.json`](comparator.json) runs Comparator on the eight main theorems, with
   [`TINNiK.MainResults`](TINNiK/MainResults.lean) as both the challenge and the solution, the three standard axioms permitted, and NanoDa enabled.
-- [`palomar/formalization.yaml`](formalization.yaml) is the entry's metadata, valid against the schema it
+- [`formalization.yaml`](formalization.yaml) is the entry's metadata, valid against the schema it
   names: the paper, the sources it cites, the statements aligned to the `TreeOfBlobs.*` theorems of its module, and its
   fidelity section, which lists every divergence from the paper.
 
@@ -94,11 +94,10 @@ A submission would still need:
 1. A Challenge that imports only Mathlib, with the definitions that its statements use in a block of its own, and the
    bridges from them to the library's definitions. The last such file, with `scripts/sync_challenge_defs.py`, which kept
    its block equal to the library's, and `scripts/gen_solution.py`, which generated the Solution from it, is in the git
-   history at `f838ea4`, for TINNiK, TOB-QMC and ECToBlob together.
+   history of lean4-tob at `f838ea4`, for TINNiK, TOB-QMC and ECToBlob together.
 2. A Solution that restates those theorems and proves them from the libraries, and a `comparator.json` that names the
    two modules.
-3. These files at the root of the repository that holds the paper, with `formalization.yaml` pointing at the new
-   modules.
+3. `formalization.yaml` pointing at the new modules.
 
 ## Audit summary
 
@@ -135,22 +134,23 @@ Lean and the repair.
   and decided the library's boundary and the project's layout. **No person has reviewed the proofs.**
 - Source audit and first foundations by Codex; statements, proofs, audit and documents by Claude (Opus 5.5) in Claude
   Code, with sub-agents, following the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) procedure.
-- Made on 2026-10-27 and from 2026-10-31 to 2026-11-01, with the other papers of the collection and Gusfield et al. 2007,
-  since moved to [lean4-gusfield2007](https://github.com/vltanh/lean4-gusfield2007); Claude Code used 85 sub-agents for
-  the five, up to commit `282215c`. [`../../docs/CREDITS.md`](https://github.com/vltanh/lean4-tob/blob/main/docs/CREDITS.md) has the details.
+- Made in lean4-tob on 2026-10-27 and from 2026-10-31 to 2026-11-01, with the other papers of the collection and
+  Gusfield et al. 2007, since moved to [lean4-gusfield2007](https://github.com/vltanh/lean4-gusfield2007); Claude Code
+  used 85 sub-agents for the five, up to commit `282215c` of lean4-tob. Moved to this repository on 2026-11-21.
+  [`CREDITS.md`](CREDITS.md) and lean4-tob's [`docs/CREDITS.md`](https://github.com/vltanh/lean4-tob/blob/main/docs/CREDITS.md) have the details.
 
 ## Related work
 
 From [Section 10 of the report](REPORT.md#10-the-paper-in-the-literature).
 
-- No other formalization of TINNiK was found. This project imports the public
+- No other formalization of TINNiK was found. This repository imports the public
   [lean4-phylogenetics](https://github.com/vltanh/lean4-phylogenetics).
 - Before: SNaQ, Baños 2019 and NANUQ infer level-1 networks from quartets. Allman et al. 2023 showed that the tree of
   blobs is identifiable from gene quartet distributions, with no assumption on the level, and TINNiK makes this an
   algorithm with a consistency theorem. We found no earlier proof of its Theorem 4.
 - Concurrent: Huber et al. 2025 and Frohn et al. 2025 determine the tree of blobs from exact quarnet information, with
   no statistical model. Both appeared after the TINNiK preprint and do not build on its algorithm.
-- Since: TOB-QMC and ECToBlob, formalized in this collection ([TOB-QMC](https://github.com/vltanh/lean4-tob-qmc/blob/main/README.md),
+- Since: TOB-QMC and ECToBlob, formalized in their own repositories of the hub lean4-tob ([TOB-QMC](https://github.com/vltanh/lean4-tob-qmc/blob/main/README.md),
   [ECToBlob](https://github.com/vltanh/lean4-ectoblob/blob/main/README.md)), describe TINNiK as the first algorithm for the problem and build on its tests.
   NANUQ⁺ and the outline of Holtgrefe et al. 2025 start from its tree of blobs, SEQUoIA uses its functions, and
   MSCquartets 3.3 implements it. We found no erratum to TINNiK.
@@ -200,7 +200,9 @@ The modules of [`TINNiK/`](TINNiK):
 | [`Statistics/OpenCutModel`](TINNiK/Statistics/OpenCutModel.lean) | Appendix C.1: the maximum likelihood estimate on the open cut model (E31) |
 | [`Statistics/Proposition6`](TINNiK/Statistics/Proposition6.lean) | Appendix C.2: Proposition 6, the density of the test distribution |
 
-The sources it uses, in [`TINNiK/External/`](TINNiK/External), each with a README that says how its source was read:
+The sources it uses, in [`TINNiK/External/`](TINNiK/External) and in lean4-tob's
+[`TreeOfBlobs/External/`](https://github.com/vltanh/lean4-tob/tree/main/TreeOfBlobs/External), each with a README that
+says how its source was read:
 
 | Folder | Modules |
 | --- | --- |
@@ -209,7 +211,7 @@ The sources it uses, in [`TINNiK/External/`](TINNiK/External), each with a READM
 | [`StudierKeppler1988`](TINNiK/External/StudierKeppler1988) | `Lemma` (the Lemma fails at a polytomy) |
 
 It also builds on Allman et al. 2023, in [`lean4-allman2023/AllmanEtAl2023/`](https://github.com/vltanh/lean4-allman2023/tree/main/AllmanEtAl2023), whose
-[folder](https://github.com/vltanh/lean4-allman2023/blob/main/README.md) documents it.
+[README](https://github.com/vltanh/lean4-allman2023/blob/main/README.md) documents it.
 
 The modules of [`lean4-tob/TreeOfBlobs/`](https://github.com/vltanh/lean4-tob/tree/main/TreeOfBlobs) that it relies on ([its README](https://github.com/vltanh/lean4-tob/blob/main/TreeOfBlobs/README.md) lists them
 all):
@@ -228,11 +230,11 @@ all):
 
 [`TINNiK/MainResults.lean`](TINNiK/MainResults.lean) has the eight main theorems.
 
-[`scripts/layers.toml`](https://github.com/vltanh/lean4-tob/blob/main/scripts/layers.toml) lists what each unit may import, and
-[`scripts/check_layers.py`](https://github.com/vltanh/lean4-tob/blob/main/scripts/check_layers.py) checks every import against it. This paper's unit is
-[`TINNiK/`](TINNiK) with [`TINNiK/MainResults.lean`](TINNiK/MainResults.lean), and it may import [`Basic`](https://github.com/vltanh/lean4-tob/tree/main/TreeOfBlobs), [`AllmanEtAl2023`](https://github.com/vltanh/lean4-allman2023/tree/main/AllmanEtAl2023), `MitchellAllmanRhodes2019`,
-`Rhodes2020` and `StudierKeppler1988`, besides Mathlib and the library `Phylogenetics`. NANUQ, TOB-QMC and ECToBlob
-import it.
+What [`TINNiK/`](TINNiK), with [`TINNiK/MainResults.lean`](TINNiK/MainResults.lean), may import is what
+[`lakefile.toml`](lakefile.toml) requires: [`TreeOfBlobs`](https://github.com/vltanh/lean4-tob/tree/main/TreeOfBlobs),
+with `MitchellAllmanRhodes2019` and `Rhodes2020`, and [`AllmanEtAl2023`](https://github.com/vltanh/lean4-allman2023/tree/main/AllmanEtAl2023),
+besides Mathlib and the library `Phylogenetics`; `StudierKeppler1988` is here. NANUQ, TOB-QMC and ECToBlob import it,
+from their own repositories.
 
 ## License
 
