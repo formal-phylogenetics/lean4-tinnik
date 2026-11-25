@@ -1,7 +1,7 @@
-# The routes of the proofs in the four papers and in the sources they cite: which numbered results each proof uses.
+# The routes of the proofs of TINNiK, and of the results of Allman et al. 2023 that they cite: which numbered results each proof uses.
 # Columns: label, environment, the paper proves it (1/0), results used.
-# Every label is assigned here or taken from the paper's TeX, and appears in the docstrings of the Lean results. Each paper has a section below.
-# Split from lean4-tob's docs/paper_routes.tsv at before-split (6e7bc49): the rows of this repository, and those of the repositories it requires, as results it cites (proved = 0).
+# Every label is assigned here or taken from the paper's TeX, and appears in the docstrings of the Lean results. The rows of Allman et al. 2023, proved in
+# lean4-allman2023, are those of its own routes file, with proved = 0.
 # TINNiK (Algorithms Mol. Biol. 2024). Labels of unnumbered statements of Appendix C are assigned here.
 tinnik:cut_line_mle	claim	1
 tinnik:cut_log_likelihood	claim	1
@@ -76,7 +76,7 @@ a:thm:infer	theorem	0	a:cor:inducedB,a:cor:largeCFdetect,a:lem:main,a:thm:CFdete
 a:claim:thm4-displayed	claim	0	a:thm:infer,a:cor:largeCFdetect,a:claim:b-unresolved,a:claim:t-resolved,a:claim:t-induced
 a:claim:splits-tree	claim	0
 a:thm:ToBident	theorem	0	a:cor:largeCFdetect,a:thm:infer,a:claim:thm4-displayed,a:claim:displayed-determine
-# What the paper says in passing, and no proof uses; `AllmanEtAl2023.InPassing` and the modules beside it. The paper gives a sentence or nothing.
+# What the paper says in passing, and no proof uses; `Allman2023.InPassing` and the modules beside it. The paper gives a sentence or nothing.
 a:claim:hybrid-not-cut	claim	0
 a:claim:m-ge-k	claim	0
 a:claim:b-deletion	claim	0

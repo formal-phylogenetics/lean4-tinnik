@@ -12,8 +12,8 @@ project:
     Proved: statistical consistency of the TINNiK algorithm (Theorem 4), with the paper's levels, and with the T3 test;
     the maximum likelihood estimates of Appendix C.1, and Propositions 5 and 6 of Appendix C.2, the limit law of the cut
     test and its density; neighbor joining in its Step 4; the algorithm with missing taxa; the counts behind its running
-    times. Of the sources it cites, Propositions 4.1, 4.2, 5.1 and 5.2 of Mitchell, Allman, Rhodes 2019, and that the
-    Lemma of Studier, Keppler 1988 fails at a polytomy.
+    times; and that the Lemma of Studier, Keppler 1988, which it cites, fails at a polytomy. The statement of record is
+    Theorem 4, in the Challenge, on definitions in Mathlib's vocabulary.
 
 
     The audit records E29-E33, E40 and E75 on the paper, and E82 on Mitchell et al. 2019.
@@ -60,7 +60,7 @@ sources:
     type: "article"
     location: "https://doi.org/10.1214/19-EJS1576"
     relationship: "background"
-    note: "The conclusion of Theorem 3.1 for the trinomial cut model, and Propositions 4.1, 4.2, 5.1 and 5.2, are proved in lean4-tob/TreeOfBlobs/External/MitchellAllmanRhodes2019, the limit laws by a direct argument."
+    note: "The conclusion of Theorem 3.1 for the trinomial cut model, and Propositions 4.1, 4.2, 5.1 and 5.2, are proved in lean4-phylo-network/PhyloNetwork/External/MitchellAllmanRhodes2019, the limit laws by a direct argument."
   - title: "Topological metrizations of trees, and new quartet methods of tree inference"
     authors:
       - "John A. Rhodes"
@@ -68,7 +68,7 @@ sources:
     type: "article"
     location: "https://doi.org/10.1109/TCBB.2019.2917204"
     relationship: "background"
-    note: "Theorem 2 is proved in lean4-tob/TreeOfBlobs/External/Rhodes2020."
+    note: "Theorem 2 is proved in lean4-phylo-network/PhyloNetwork/External/Rhodes2020."
   - title: "A note on the neighbor-joining algorithm of Saitou and Nei"
     authors:
       - "J. A. Studier"
@@ -77,12 +77,12 @@ sources:
     type: "article"
     location: "https://doi.org/10.1093/oxfordjournals.molbev.a040527"
     relationship: "background"
-    note: "Its Lemma is shown to fail at a polytomy in TINNiK/External/StudierKeppler1988; its Theorem holds with polytomies, Phylogenetics.NJ.exists_QC_lt_of_not_nbr in the library. Read in a scan of the journal's PDF."
+    note: "Its Lemma is shown to fail at a polytomy in Tinnik/External/StudierKeppler1988; its Theorem holds with polytomies, Phylogenetics.NJ.exists_QC_lt_of_not_nbr in the library. Read in a scan of the journal's PDF."
 
 related_formalizations:
   - id: "https://github.com/vltanh/lean4-phylogenetics"
     relationship: "adapts"
-    note: "This repository imports this library, pinned at commit b56ce53, for its definitions and general results, so TINNiK/MainResults.lean imports it too. Finite Kingman coalescent and hierarchy modules were adapted from commit 06f684e5 under Apache-2.0 before that, in lean4-tob (lean4-tob/docs/ADAPTED_SOURCES.md, lean4-tob/docs/COALESCENT_SOURCES.md). The network coalescent on arbitrary networks was first written in lean4-tob and has moved to the library; the library's term-based level-1 network coalescent is not used."
+    note: "This repository imports this library, pinned at commit 3fcabfd, for its definitions and general results; the Challenge restates the definitions it needs in Mathlib's vocabulary, and Tinnik/Bridge proves that they are the library's. Finite Kingman coalescent and hierarchy modules were adapted from commit 06f684e5 under Apache-2.0 before that, in lean4-tob (lean4-tob/docs/ADAPTED_SOURCES.md, lean4-tob/docs/COALESCENT_SOURCES.md). The network coalescent on arbitrary networks was first written in lean4-tob and has moved to the library; the library's term-based level-1 network coalescent is not used."
   - id: "https://github.com/vltanh/lean4-camus"
     relationship: "independent"
     note: "Surveyed; no code used."
@@ -94,7 +94,8 @@ status:
     counts (E31), and is read on the closed simplex. Also proved, from what the paper says in passing: the T3 option,
     the algorithm with missing taxa, neighbor joining in Step 4, and the counts behind its running times. Not
     formalized: simulations and empirical tables, and results of cited sources that no proof here uses. Running times
-    are counts of operations, with no machine model. See Section 9 of REPORT.md.
+    are counts of operations, with no machine model. The Challenge states Theorem 4, the paper's main result; the other
+    results are in the library. See Section 9 of docs/Tinnik/REPORT.md.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: []
@@ -121,14 +122,14 @@ automation:
       prompting_notes: "Slash command with the three paper links, continuing from the earlier handoff; later the user asked to match the sources closely, to formalize what the report listed as not formalized, to add Gusfield et al. 2007 and Allman et al. 2023 as primary papers on the library lean4-phylogenetics, and to finish what remained, leaving only empirical claims and wrong statements."
   spend_usd: "not tracked"
   notes: >-
-    The user chose the papers and the versions of the first three, agreed to the statement corrections of ECToBlob and TOB-QMC, and decided the library's boundary, the layout, the kernels and publication. AI systems wrote the code, the statements, the audit and the documents. The automation above is for the whole project in lean4-tob, which until 2026-11-04 also had Gusfield et al. 2007, since moved to its own repository, lean4-gusfield2007; on 2026-11-21 each of its four papers moved, with its entry, to a repository of its own. Now TINNiK/ has 13 modules; the audit checks every declaration of this repository and of the libraries it requires, all on the standard axioms; three kernels accepted the 8 main theorems of this entry in lean4-tob, before the split (scripts/check_kernels.sh), and have not been run here since. See lean4-tob/docs/CREDITS.md.
+    The user chose the papers and the versions of the first three, agreed to the statement corrections of ECToBlob and TOB-QMC, and decided the library's boundary, the layout, the kernels and publication. AI systems wrote the code, the statements, the audit and the documents. The automation above is for the whole project in lean4-tob, which until 2026-11-04 also had Gusfield et al. 2007, since moved to its own repository, lean4-gusfield2007; on 2026-11-21 each of its four papers moved, with its entry, to a repository of its own. Tinnik/ is the library; the audit checks every declaration of this repository and of the libraries it requires, all on the standard axioms, and Lean's kernel, NanoDa and con-ron accept the theorem of the Challenge (scripts/check_kernels.sh). See docs/Tinnik/CREDITS.md and lean4-tob's docs/CREDITS.md at 05a024a.
 
 fidelity:
   divergences: >-
-    Statements corrected (Sections 3, 4 and 6 of REPORT.md): the maximum likelihood estimate on the closed
-    simplex (E31). Library statements omit hypotheses that the proofs do not use (Section 5 of the report);
-    TINNiK/MainResults.lean keeps them. Readings: Section 6 of the report and of lean4-tob/docs/REPORT.md. False claims found,
-    not formalized as stated: Studier and Keppler's Lemma at a polytomy, a failure of wording if the letter means binary
+    Statements corrected (Sections 3, 4 and 6 of docs/Tinnik/REPORT.md): the maximum likelihood estimate on the closed
+    simplex (E31). Library statements omit hypotheses that the proofs do not use (Section 5 of the report); the
+    Challenge's statement of Theorem 4 keeps them. Readings: Section 6 of the report. False claims found, not
+    formalized as stated: Studier and Keppler's Lemma at a polytomy, a failure of wording if the letter means binary
     trees.
 
 
@@ -136,8 +137,8 @@ fidelity:
     report. Repairing gaps or errors: Theorem 4 under the alternative (E33); neighbor joining (Studier and Keppler's
     Lemma fails at polytomies). Because Lean lacks the mathematics: Proposition 5, by a direct central limit argument in
     place of van der Vaart's Theorem 16.7, and Mitchell et al. Propositions 4.1 and 5.1 by the same route. No printed
-    argument to follow: Buneman's four-point theorem and the T3 theorems. docs/route_differences.tsv records every
-    difference of route.
+    argument to follow: Buneman's four-point theorem and the T3 theorems. docs/Tinnik/route_differences.tsv records
+    every difference of route.
 
 review:
   status: "agent-reviewed"
@@ -145,50 +146,16 @@ review:
     - "none (no human review)"
   notes: >-
     Independent AI agents reviewed the statements against the sources and compared the formal proofs with the papers'; a
-    separate agent checked the findings. The route check and, in lean4-tob before the split, the three kernels (scripts/check_kernels.sh: Lean's kernel, NanoDa, con-ron) ran locally; Comparator runs on TINNiK/MainResults.lean as both challenge and solution, so it compares no separate statement file with a proof.
+    separate agent checked the findings. The route check, Comparator (Lean's kernel and NanoDa) and con-ron
+    (scripts/check_kernels.sh) run locally.
 
 alignment:
-  namespace: "TreeOfBlobs"
+  namespace: "TinnikChallenge"
   statements:
     - source: "TINNiK, Theorem 4"
-      lean: "TreeOfBlobs.theorem4"
-      module: "TINNiK.MainResults"
+      lean: "TinnikChallenge.theorem4"
+      module: "Tinnik.Challenge"
       status: "proved"
-      note: "For generic parameters on a binary network, with the paper's levels. TINNiK.theorem4_explicit gives one sequence for all networks and parameters."
-    - source: "TINNiK, the sentence before Theorem 4, missing taxa"
-      lean: "TreeOfBlobs.tinnik_theorem4_missing"
-      module: "TINNiK.MainResults"
-      status: "proved"
-      note: "The source states no model: gene trees on taxa fixed in advance, each set of four on more and more of them."
-    - source: "TINNiK, Appendix C.1 on the open cut model"
-      lean: "TreeOfBlobs.tinnik_not_exists_generatingCutModel_maximizer"
-      module: "TINNiK.MainResults"
-      status: "proved, refutes the source"
-      note: "E31: at counts in one coordinate; not every count with a zero fails."
-    - source: "Mitchell et al. 2019, Proposition 4.1"
-      lean: "TreeOfBlobs.mitchell_proposition4_1"
-      module: "TINNiK.MainResults"
-      status: "proved"
-      note: "For the trinomial; by the central limit theorem, in place of van der Vaart's Theorem 16.7."
-    - source: "Mitchell et al. 2019, Proposition 4.2"
-      lean: "TreeOfBlobs.mitchell_proposition4_2"
-      module: "TINNiK.MainResults"
-      status: "proved"
-      note: "For all φ₀ < 3/2; the source says (0, 1]."
-    - source: "Mitchell et al. 2019, Proposition 5.1"
-      lean: "TreeOfBlobs.mitchell_proposition5_1"
-      module: "TINNiK.MainResults"
-      status: "proved"
-      note: "For the trinomial; as Proposition 4.1."
-    - source: "Mitchell et al. 2019, Proposition 5.2"
-      lean: "TreeOfBlobs.mitchell_proposition5_2"
-      module: "TINNiK.MainResults"
-      status: "proved"
-      note: "As printed; its appendix has a misprint in one display."
-    - source: "Studier, Keppler 1988, the Lemma at a polytomy"
-      lean: "TreeOfBlobs.studierKeppler_not_lemmaAsPrinted"
-      module: "TINNiK.MainResults"
-      status: "proved, refutes a reading"
-      note: "If the letter means binary trees, a failure of wording."
+      note: "For generic parameters on a binary network, with the paper's levels. The library's Tinnik.theorem4_explicit gives one sequence for all networks and parameters; Tinnik.theorem4_missing, the sentence before Theorem 4, with missing taxa; Tinnik.proposition5 and Tinnik.proposition6, Appendix C.2; Tinnik.not_exists_generatingCutModel_maximizer, E31."
 
 acknowledgements: "Lean, Mathlib; the Phylogenetics library of the maintainer (lean4-phylogenetics), for adapted Kingman coalescent modules; the authors of the papers and sources."
