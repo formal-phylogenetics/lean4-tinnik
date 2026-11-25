@@ -1,8 +1,8 @@
 module
 
-public import AllmanEtAl2023.Basic
+public import Allman2023.LargeNetworks.Rule
 public import TreeOfBlobs.Defs
-public import TreeOfBlobs.Testing.Defs
+public import PhyloNetwork.Testing.Defs
 public import TreeOfBlobs.TreeCounts
 public import Phylogenetics.Tree.Splits
 public import Phylogenetics.Network.CutHierarchy
@@ -248,7 +248,7 @@ theorem labels_of_card_five {a b c d e : X} (h5 : ({a, b, c, d, e} : Finset X).c
     (({a, b, c, d} : Finset X) ∩ {b, c, d, e}) = {b, c, d} ∧
       ({a, b, c, d} : Finset X) \ {b, c, d, e} = {a} ∧ ({b, c, d, e} : Finset X) \ {a, b, c, d} = {e} ∧
       otherSets ({a, b, c, d} : Finset X) {b, c, d, e} = {{a, b, c, e}, {a, b, d, e}, {a, c, d, e}} := by
-  obtain ⟨hab, hac, had, hae, hbc, hbd, hbe, hcd, hce, hde⟩ := AllmanEtAl2023.ne_of_card_five h5
+  obtain ⟨hab, hac, had, hae, hbc, hbd, hbe, hcd, hce, hde⟩ := Finset.ne_of_card_eq_five h5
   have hi : (({a, b, c, d} : Finset X) ∩ {b, c, d, e}) = {b, c, d} := by
     ext w
     simp only [mem_inter, mem_insert, mem_singleton]
@@ -689,7 +689,7 @@ theorem mem_bQuartetInference_iff (hB₀ : ∀ q ∈ B₀, q.card = 4) (τ : Set
       (({a, b, c, d} : Finset X) ∩ {b, c, d, e}).card = 3 := by
     intro a b c d e h5
     obtain ⟨hi, -, -, -⟩ := labels_of_card_five h5
-    obtain ⟨-, -, -, -, hbc, hbd, -, hcd, -, -⟩ := AllmanEtAl2023.ne_of_card_five h5
+    obtain ⟨-, -, -, -, hbc, hbd, -, hcd, -, -⟩ := Finset.ne_of_card_eq_five h5
     rw [hi]
     simp [hbc, hbd, hcd]
   induction h with

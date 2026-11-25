@@ -1,10 +1,10 @@
 module
 
-public import AllmanEtAl2023.Basic
+public import Allman2023.LargeNetworks.Rule
 public import TreeOfBlobs.Defs
 public import Phylogenetics.NMSC.Defs
-public import TreeOfBlobs.Testing.Defs
-public import TreeOfBlobs.Testing.IID
+public import PhyloNetwork.Testing.Defs
+public import PhyloNetwork.Testing.IID
 public import Phylogenetics.Tree.NeighborJoining
 public import Phylogenetics.Network.CutHierarchy
 public import TINNiK.Basic
@@ -53,7 +53,7 @@ theorem theorem4_nj [Fintype V] [Fintype E] {N : RootedNetwork V E X}
 `χ²₁` at `log m`. -/
 theorem theorem4_explicit_nj [Fintype V] [Fintype E] {N : RootedNetwork V E X}
     (hN : N.IsPhylogenetic) (hX : 4 ≤ Fintype.card X) {θ : MetricData E} (hθ : N.IsMetric θ)
-    (hdet : AllmanEtAl2023.CFDetectable N (nmscCF N θ 0)) {β δ : ℝ} (hβ : 0 < β) (hδ₂ : δ < 2)
+    (hdet : Allman2023.CFDetectable N (nmscCF N θ 0)) {β δ : ℝ} (hβ : 0 < β) (hδ₂ : δ < 2)
     (tb : NJ.TieBreak X)
     {ml : (QuartetTree X → ℝ) → Finset X → QuartetTree X} (hml : IsMLSelection ml) :
     Tendsto (fun m : ℕ => iidProb (geneTreeDist N θ 0) m fun ω =>

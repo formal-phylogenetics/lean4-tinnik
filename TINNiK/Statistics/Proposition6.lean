@@ -1,8 +1,8 @@
 module
 
 public import TINNiK.Statistics.AppendixC
-public import TreeOfBlobs.ForMathlib.Probability.GaussianStrip
-public import TreeOfBlobs.Testing.Defs
+public import PhyloNetwork.ForMathlib.Probability.GaussianStrip
+public import PhyloNetwork.Testing.Defs
 
 /-!
 # TINNiK Appendix C.2: Proposition 6, the density of the test distribution

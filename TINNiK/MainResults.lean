@@ -1,15 +1,15 @@
 module
 
 public import TreeOfBlobs.Defs
-public import TreeOfBlobs.Testing.Defs
-public import TreeOfBlobs.Testing.IID
-public import TreeOfBlobs.Testing.MissingTaxa
-public import TreeOfBlobs.Testing.Trinomial.Whiten
-public import TreeOfBlobs.External.MitchellAllmanRhodes2019.CutModel
-public import TreeOfBlobs.External.MitchellAllmanRhodes2019.T1Limit
-public import TreeOfBlobs.External.MitchellAllmanRhodes2019.T3Density
-public import TreeOfBlobs.External.MitchellAllmanRhodes2019.T3Limit
-public import TreeOfBlobs.External.MitchellAllmanRhodes2019.T3Test
+public import PhyloNetwork.Testing.Defs
+public import PhyloNetwork.Testing.IID
+public import PhyloNetwork.Testing.MissingTaxa
+public import PhyloNetwork.Testing.Trinomial.Whiten
+public import PhyloNetwork.External.MitchellAllmanRhodes2019.CutModel
+public import PhyloNetwork.External.MitchellAllmanRhodes2019.T1Limit
+public import PhyloNetwork.External.MitchellAllmanRhodes2019.T3Density
+public import PhyloNetwork.External.MitchellAllmanRhodes2019.T3Limit
+public import PhyloNetwork.External.MitchellAllmanRhodes2019.T3Test
 public import TINNiK.External.StudierKeppler1988.Lemma
 public import Phylogenetics.Hierarchy.Defs
 public import Phylogenetics.NMSC.Defs
@@ -42,7 +42,7 @@ universe u
 
 section
 
-open Phylogenetics Phylogenetics.RootedNetwork ECToBlob TOBQMC Filter Topology
+open Phylogenetics Phylogenetics.RootedNetwork Filter Topology
 
 /-- **TINNiK, Theorem 4.** For generic numerical parameters on a binary network, there is a sequence `α_m → 0` such that for
 any `β > 0` and `0 ≤ δ < 2`, any exact tree builder and any selection of maximum likelihood topologies, the TINNiK
@@ -64,7 +64,7 @@ end
 
 section
 
-open Phylogenetics Phylogenetics.RootedNetwork ECToBlob TOBQMC AllmanEtAl2023 Filter Topology
+open Phylogenetics Phylogenetics.RootedNetwork Allman2023 Filter Topology
 
 /-- **TINNiK, the sentence before Theorem 4: with missing taxa.** As `theorem4`, for gene trees on subsets of the taxa that leave each set of four taxa on more and more of them. -/
 theorem tinnik_theorem4_missing {V E X : Type*} [Fintype V] [Fintype E] [Fintype X] [DecidableEq X] {N : RootedNetwork V E X} (hN : N.IsPhylogenetic)

@@ -1,13 +1,13 @@
 module
 
-public import AllmanEtAl2023.Algorithm
+public import Allman2023.MainResult.Algorithm
 public import TINNiK.NJ
-public import TreeOfBlobs.Testing.Tails
+public import PhyloNetwork.Testing.Tails
 
 /-!
 # TINNiK and the outline of an algorithm in Allman, Baños, Mitchell, Rhodes 2023
 
-Section 5 of that paper outlines an algorithm, `AllmanEtAl2023.Algorithm.outline`, with a test it doesn't specify ("step 2 requires the development of a novel statistical test"), and says "Like NANUQ, it can be shown to provide a statistically consistent estimate of the network features it seeks to infer". TINNiK is the later paper that develops it. So this module is the bridge, here because the modules of the earlier paper import no later paper.
+Section 5 of that paper outlines an algorithm, `Allman2023.Algorithm.outline`, with a test it doesn't specify ("step 2 requires the development of a novel statistical test"), and says "Like NANUQ, it can be shown to provide a statistically consistent estimate of the network features it seeks to infer". TINNiK is the later paper that develops it. So this module is the bridge, here because the modules of the earlier paper import no later paper.
 
 * `cutReject`: the cut test at a level `α`, with the maximum likelihood topology. `outline_cut_eq_tinnik`: with this test, the outline is TINNiK's algorithm without its star test and its cutoff: `tinnik ml α β 0 M`, for any `β > 1`.
 * `outline_cut_consistent`: **the consistency of the outline for generic parameters**, from `TINNiK.theorem4`; `outline_cut_consistent_nj`, with neighbor joining in step 4. Both have a tree of blobs in the paper's form, `(Trd hN hX).splits`.
@@ -21,7 +21,7 @@ open scoped Classical
 
 namespace TINNiK
 
-open AllmanEtAl2023 AllmanEtAl2023.Algorithm
+open Allman2023 Allman2023.Algorithm
 
 variable {X : Type*} [Fintype X] [DecidableEq X]
 

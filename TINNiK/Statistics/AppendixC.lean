@@ -1,9 +1,9 @@
 module
 
 public import TINNiK.Statistics.Definitions
-public import TreeOfBlobs.External.MitchellAllmanRhodes2019.CutModel
+public import PhyloNetwork.External.MitchellAllmanRhodes2019.CutModel
 public import TreeOfBlobs.ForMathlib.Analysis.SpecialFunctions.GibbsInequality
-public import TreeOfBlobs.Testing.Trinomial.Tests
+public import PhyloNetwork.Testing.Trinomial.Tests
 public import Mathlib.MeasureTheory.Function.ConvergenceInDistribution
 public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 

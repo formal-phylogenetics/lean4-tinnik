@@ -1,17 +1,17 @@
 module
 
-public import AllmanEtAl2023.Algorithm
-public import AllmanEtAl2023.Basic
-public import AllmanEtAl2023.CFDetectable
-public import AllmanEtAl2023.CutOrder
-public import AllmanEtAl2023.GenericCF
+public import Allman2023.MainResult.Algorithm
+public import Allman2023.LargeNetworks.Rule
+public import Allman2023.FourTaxa.CFDetectable
+public import Allman2023.LargeNetworks.CutOrder
+public import Allman2023.FourTaxa.GenericCF
 public import TreeOfBlobs.Defs
-public import TreeOfBlobs.External.Rhodes2020.Theorem2
+public import PhyloNetwork.External.Rhodes2020.Theorem2
 public import Phylogenetics.NMSC.Analytic
 public import Phylogenetics.NMSC.Basic
 public import Phylogenetics.Network.CutHierarchy
 public import Phylogenetics.Network.DeletedArcs
-public import TreeOfBlobs.Testing.Limits
+public import PhyloNetwork.Testing.Limits
 public import Phylogenetics.Tree.Metric
 public import TINNiK.Statistics.AppendixC
 
@@ -19,10 +19,10 @@ public import TINNiK.Statistics.AppendixC
 # TINNiK: consistency of the algorithm
 
 The count of Step 3(a)(i) (E29 of the report), and Theorem 4. Theorem 4 takes the CF-detectability of 4-blobs from
-`AllmanEtAl2023.cfDetectable_generic` (TINNiK's Theorem 1 on the induced 4-taxon networks, from the proof of Allman et al.'s Corollary 1, in
-`src/AllmanEtAl2023/CFDetectable.lean`), and excludes the centroid by the analytic argument of the paper
+`Allman2023.cfDetectable_generic` (TINNiK's Theorem 1 on the induced 4-taxon networks, from the proof of Allman et al.'s Corollary 1, in
+`src/Allman2023/CFDetectable.lean`), and excludes the centroid by the analytic argument of the paper
 (`isGenericNull_centroid`). Theorem 2 and the combinatorial part of Theorem 3 are proved in
-`src/AllmanEtAl2023/Basic.lean`.
+`src/Allman2023/Basic.lean`.
 -/
 
 @[expose] public noncomputable section
@@ -114,7 +114,7 @@ theorem quartetDistance_congr {Bq Bq' : Set (Finset X)} {τ τ' : Set (QuartetTr
     quartetDistance Bq τ = quartetDistance Bq' τ' := by
   subst h2
   funext x y
-  exact AllmanEtAl2023.Algorithm.quartetDistance_congr h1 x y
+  exact Allman2023.Algorithm.quartetDistance_congr h1 x y
 
 /-- The deterministic part of Theorem 4: from correct answers on all 4-taxon sets the algorithm returns
 the tree of blobs. The closure identifies the B-quartets (`closure_complete`, `closure_sound`); the
@@ -136,14 +136,14 @@ private theorem tinnik_eq_of_tests {V E : Type*} {N : RootedNetwork V E X} (hN :
     simp only [Set.mem_ofPred_eq]
     constructor
     · intro h
-      exact ⟨AllmanEtAl2023.Algorithm.card_of_bInferred (B₀ := {q' | q'.card = 4 ∧ ¬ IsTreelike N q'}) (fun q hq => hq.1) h,
-        AllmanEtAl2023.closure_sound hN h⟩
+      exact ⟨Allman2023.Algorithm.card_of_bInferred (B₀ := {q' | q'.card = 4 ∧ ¬ IsTreelike N q'}) (fun q hq => hq.1) h,
+        Allman2023.closure_sound hN h⟩
     · rintro ⟨h4, h⟩
-      exact AllmanEtAl2023.closure_complete hN h4 h
+      exact Allman2023.closure_complete hN h4 h
   have hτ : {s : QuartetTree X | s ∈ {s | InducedCutSplit N s} ∧
       s.taxa ∉ {q | q.card = 4 ∧ IsBQuartet N q}} = {s | Displays (treeOfBlobs N) s} := by
     ext s
-    simp only [Set.mem_ofPred_eq, AllmanEtAl2023.displays_treeOfBlobs_iff hN s,
+    simp only [Set.mem_ofPred_eq, Allman2023.displays_treeOfBlobs_iff hN s,
       QuartetTree.card_taxa, true_and]
   have hdist : quartetDistance {q | q.card = 4 ∧ IsBQuartet N q}
       {s | Displays (treeOfBlobs N) s} =
@@ -302,7 +302,7 @@ theorem tendsto_good_cut {V E : Type*} [Fintype V] [Fintype E] [Nonempty X]
     {ρ : ℝ} (hρ : 0 ≤ ρ ∧ ρ ≤ 1) {α : ℕ → ℝ} (hα₀ : Tendsto α atTop (𝓝 0))
     {ml : (QuartetTree X → ℝ) → Finset X → QuartetTree X}
     (hml : IsMLSelection ml) {s₀ : QuartetTree X}
-    (hc : AllmanEtAl2023.IsStrictlyCutAt (nmscCF N θ ρ) s₀) :
+    (hc : Allman2023.IsStrictlyCutAt (nmscCF N θ ρ) s₀) :
     Tendsto (fun m => iidProb (geneTreeDist N θ ρ) m fun ω =>
       ml (quartetCount unroot ω) s₀.taxa = s₀ ∧
         α m ≤ cutPValue (quartetCount unroot ω) s₀) atTop (𝓝 1) := by
@@ -336,7 +336,7 @@ test's p-value lies, so the cut test rejects at them. -/
 private theorem tendsto_cut_rejects {V E : Type*} [Fintype V] [Fintype E] {N : RootedNetwork V E X}
     {θ : MetricData E} {ρ : ℝ} (hd : IsDist (geneTreeDist N θ ρ)) {α : ℕ → ℝ} (hα : ∀ m, 0 < α m)
     (hαlog : Tendsto (fun m : ℕ => Real.log (α m) / m) atTop (𝓝 0)) {q : Finset X} (hq : q.card = 4)
-    (hnc : AllmanEtAl2023.IsNonCut (nmscCF N θ ρ) q) :
+    (hnc : Allman2023.IsNonCut (nmscCF N θ ρ) q) :
     Tendsto (fun m => iidProb (geneTreeDist N θ ρ) m fun ω =>
       ∀ s ∈ treesOn q, cutPValue (quartetCount unroot ω) s < α m) atTop (𝓝 1) := by
   obtain ⟨d, hd0, halt⟩ := QuartetTests.cutTest_alternative hd hq hnc
@@ -351,7 +351,7 @@ def NoCentroidCF (p : QuartetTree X → ℝ) : Prop :=
 the paper's separate step for the centroid (`isGenericNull_centroid`) is redundant, as Section 11 of the
 report records. -/
 theorem noCentroidCF_of_cfDetectable {V E : Type*} {N : RootedNetwork V E X}
-    {p : QuartetTree X → ℝ} (hdet : AllmanEtAl2023.CFDetectable N p) : NoCentroidCF p := by
+    {p : QuartetTree X → ℝ} (hdet : Allman2023.CFDetectable N p) : NoCentroidCF p := by
   intro q hq hall
   by_cases htl : IsTreelike N q
   · obtain ⟨s, hs, hc⟩ := htl
@@ -366,7 +366,7 @@ theorem noCentroidCF_of_cfDetectable {V E : Type*} {N : RootedNetwork V E X}
 
 omit [Fintype X] [DecidableEq X] in
 /-- The deletion that leaves each vertex exactly one parent. Off it, the inheritance probabilities of
-`AllmanEtAl2023.deletionMetric` are all `0` or `1`. -/
+`Allman2023.deletionMetric` are all `0` or `1`. -/
 private theorem exists_isDeletion_unique_parent {V E : Type*} [Fintype E] {N : RootedNetwork V E X}
     (hN : N.IsPhylogenetic) : ∃ D : Set E, N.IsDeletion D ∧
       ∀ f g, f ∉ D → g ∉ D → N.graph.target f = N.graph.target g → f = g := by
@@ -420,19 +420,19 @@ theorem isGenericNull_centroid [Fintype V] [Fintype E] {N : RootedNetwork V E X}
     by_cases htl : IsTreelike N q
     · obtain ⟨s, hs, hc⟩ := htl
       obtain ⟨D, hD, -⟩ := exists_isDeletion_unique_parent hN
-      obtain ⟨e, he⟩ := (AllmanEtAl2023.inducedCutSplit_iff_exists_splitOffAt hN _).mp hc
-      have hlt := AllmanEtAl2023.three_quarters_lt_nmscCF hN hD (ℓ := fun _ => 3)
-        (fun _ => by norm_num) rfl (he.mono (Set.empty_subset D))
-      have hne : nmscCF N (AllmanEtAl2023.deletionMetric N D fun _ => 3) 0 s ≠ 1 / 3 := by
+      obtain ⟨e, he⟩ := (Allman2023.inducedCutSplit_iff_exists_splitOffAt hN _).mp hc
+      have hlt := Allman2023.three_quarters_lt_nmscCF hN hD (ℓ := fun _ => 3)
+        (fun _ => by norm_num) rfl (Allman2023.splitOffAt_mono (Set.empty_subset D) he)
+      have hne : nmscCF N (Allman2023.deletionMetric N D fun _ => 3) 0 s ≠ 1 / 3 := by
         intro h
         rw [h] at hlt
         norm_num at hlt
-      refine (AllmanEtAl2023.isGenericNull_of_analyticOnNhd
+      refine (Phylogenetics.RootedNetwork.isGenericNull_of_analyticOnNhd
         (F := fun θ => nmscCF N θ 0 s - 1 / 3)
         (fun d => (analyticOnNhd_nmscCF_coordMetric N d 0 s).sub analyticOnNhd_const)
-        (AllmanEtAl2023.isNormalized_deletionMetric hN hD _) (sub_ne_zero.2 hne)).mono ?_
+        (Allman2023.isNormalized_deletionMetric hN hD _) (sub_ne_zero.2 hne)).mono ?_
       exact fun θ hθ => ⟨hθ.1, sub_eq_zero.2 (hθ.2 s hs)⟩
-    · exact (AllmanEtAl2023.isGenericNull_not_isNonCut hN hBin hq htl).mono fun θ hθ =>
+    · exact (Allman2023.isGenericNull_not_isNonCut hN hBin hq htl).mono fun θ hθ =>
         ⟨hθ.1, fun hnc => hnc r hr r' hr' hrr ((hθ.2 r hr).trans (hθ.2 r' hr').symm)⟩
   refine (IsGenericNull.iUnion key).mono ?_
   rintro θ ⟨hθ, hnot⟩
@@ -445,7 +445,7 @@ theorem isGenericNull_centroid [Fintype V] [Fintype E] {N : RootedNetwork V E X}
 CF off the centroid, and the cut test by CF-detectability. -/
 private theorem tendsto_qGood {V E : Type*} [Fintype V] [Fintype E] {N : RootedNetwork V E X}
     (hN : N.IsPhylogenetic) (hX : 4 ≤ Fintype.card X) {θ : MetricData E} (hθ : N.IsMetric θ)
-    {ρ : ℝ} (hρ : 0 ≤ ρ ∧ ρ ≤ 1) (hdet : AllmanEtAl2023.CFDetectable N (nmscCF N θ ρ))
+    {ρ : ℝ} (hρ : 0 ≤ ρ ∧ ρ ≤ 1) (hdet : Allman2023.CFDetectable N (nmscCF N θ ρ))
     (hcen : NoCentroidCF (nmscCF N θ ρ))
     {α : ℕ → ℝ} (hα₀ : Tendsto α atTop (𝓝 0)) (hrej : Rejects N θ ρ α)
     {β : ℝ} (hβ : 0 < β) {ml : (QuartetTree X → ℝ) → Finset X → QuartetTree X}
@@ -468,7 +468,7 @@ private theorem tendsto_qGood {V E : Type*} [Fintype V] [Fintype E] {N : RootedN
       refine tendsto_iidProb_of_imp hd (Eventually.of_forall fun m ω hω => ?_)
         (tendsto_good_cut hN hθ hρ hα₀ hml (hdet.cut s₀ hc₀))
       refine ⟨fun s hsq hcs => ?_, fun hnt => absurd ⟨s₀, hs₀, hc₀⟩ hnt⟩
-      have hss : s = s₀ := AllmanEtAl2023.inducedCutSplit_unique hN hcs hc₀
+      have hss : s = s₀ := Allman2023.inducedCutSplit_unique hN hcs hc₀
         (Finset.mem_filter.mp hsq).2
       subst hss
       exact hω
@@ -485,7 +485,7 @@ rejects on the sets with no cut-edge split, and any `β > 0`, TINNiK's hypothesi
 answer on all 4-taxon sets with probability tending to one. -/
 theorem tests_correct_of_noCentroidCF {V E : Type*} [Fintype V] [Fintype E] {N : RootedNetwork V E X}
     (hN : N.IsPhylogenetic) (hX : 4 ≤ Fintype.card X) {θ : MetricData E} (hθ : N.IsMetric θ)
-    {ρ : ℝ} (hρ : 0 ≤ ρ ∧ ρ ≤ 1) (hdet : AllmanEtAl2023.CFDetectable N (nmscCF N θ ρ))
+    {ρ : ℝ} (hρ : 0 ≤ ρ ∧ ρ ≤ 1) (hdet : Allman2023.CFDetectable N (nmscCF N θ ρ))
     (hcen : NoCentroidCF (nmscCF N θ ρ))
     {α : ℕ → ℝ} (hα₀ : Tendsto α atTop (𝓝 0)) (hrej : Rejects N θ ρ α)
     {β : ℝ} (hβ : 0 < β) {ml : (QuartetTree X → ℝ) → Finset X → QuartetTree X}
@@ -506,7 +506,7 @@ theorem tests_correct_of_noCentroidCF {V E : Type*} [Fintype V] [Fintype E] {N :
 centroid (`noCentroidCF_of_cfDetectable`). This is what TOB-QMC §4.3 cites from TINNiK's Theorem 4. -/
 theorem tests_correct {V E : Type*} [Fintype V] [Fintype E] {N : RootedNetwork V E X}
     (hN : N.IsPhylogenetic) (hX : 4 ≤ Fintype.card X) {θ : MetricData E} (hθ : N.IsMetric θ)
-    {ρ : ℝ} (hρ : 0 ≤ ρ ∧ ρ ≤ 1) (hdet : AllmanEtAl2023.CFDetectable N (nmscCF N θ ρ))
+    {ρ : ℝ} (hρ : 0 ≤ ρ ∧ ρ ≤ 1) (hdet : Allman2023.CFDetectable N (nmscCF N θ ρ))
     {α : ℕ → ℝ} (hα₀ : Tendsto α atTop (𝓝 0)) (hrej : Rejects N θ ρ α)
     {β : ℝ} (hβ : 0 < β) {ml : (QuartetTree X → ℝ) → Finset X → QuartetTree X}
     (hml : IsMLSelection ml) :
@@ -542,7 +542,7 @@ distribution at the estimated parameter tends to `χ²₁`, so the p-value is as
 not reject at levels `α_m → 0` (`QuartetTests.cutTest_null`). -/
 theorem theorem4_of_rejects [Fintype V] [Fintype E] {N : RootedNetwork V E X}
     (hN : N.IsPhylogenetic) (hX : 4 ≤ Fintype.card X) {θ : MetricData E}
-    (hθ : N.IsMetric θ) (hdet : AllmanEtAl2023.CFDetectable N (nmscCF N θ 0))
+    (hθ : N.IsMetric θ) (hdet : Allman2023.CFDetectable N (nmscCF N θ 0))
     (hcen : NoCentroidCF (nmscCF N θ 0))
     {α : ℕ → ℝ} (hα₀ : Tendsto α atTop (𝓝 0)) (hrej : Rejects N θ 0 α)
     {β δ : ℝ} (hβ : 0 < β) (hδ₂ : δ < 2) {M : TreeBuilder X} (hM : IsExactBuilder M)
@@ -560,7 +560,7 @@ theorem theorem4_of_rejects [Fintype V] [Fintype E] {N : RootedNetwork V E X}
 /-- Levels with `log(1/α_m) = o(m)` make the cut test reject on the sets with no cut-edge split. -/
 theorem rejects_of_log [Fintype V] [Fintype E] [Nonempty X] {N : RootedNetwork V E X} (hN : N.IsPhylogenetic)
     {θ : MetricData E} (hθ : N.IsMetric θ) {ρ : ℝ} (hρ : 0 ≤ ρ ∧ ρ ≤ 1)
-    (hdet : AllmanEtAl2023.CFDetectable N (nmscCF N θ ρ))
+    (hdet : Allman2023.CFDetectable N (nmscCF N θ ρ))
     {α : ℕ → ℝ} (hα : ∀ m, 0 < α m) (hαlog : Tendsto (fun m : ℕ => Real.log (α m) / m) atTop (𝓝 0)) :
     Rejects N θ ρ α := fun _ hq htl =>
   tendsto_cut_rejects ⟨geneTreeDist_nonneg hN hθ hρ, sum_geneTreeDist hN hθ hρ⟩ hα hαlog hq (hdet.blob _ hq htl)
@@ -582,7 +582,7 @@ private theorem tendsto_chiSqOneTail_mul {d : ℝ} (hd : 0 < d) :
 `d/2` is the `d` here (`QuartetTests.cutTest_alternative`). -/
 theorem exists_levels [Fintype V] [Fintype E] [Nonempty X] {N : RootedNetwork V E X} (hN : N.IsPhylogenetic)
     {θ : MetricData E} (hθ : N.IsMetric θ) {ρ : ℝ} (hρ : 0 ≤ ρ ∧ ρ ≤ 1)
-    (hdet : AllmanEtAl2023.CFDetectable N (nmscCF N θ ρ)) :
+    (hdet : Allman2023.CFDetectable N (nmscCF N θ ρ)) :
     ∃ α : ℕ → ℝ, Tendsto α atTop (𝓝 0) ∧ (∀ m, 0 < α m) ∧ Rejects N θ ρ α := by
   have hd : IsDist (geneTreeDist N θ ρ) :=
     ⟨geneTreeDist_nonneg hN hθ hρ, sum_geneTreeDist hN hθ hρ⟩
@@ -624,7 +624,7 @@ sequence `α_m → 0` such that for any `β > 0` and `2 > δ ≥ 0`, the TINNiK 
 `m` independent gene trees from the NMSC infers the tree of blobs with probability tending to one. The
 sequence is the paper's (`exists_levels`), built from the limits `d` of the statistics. The generic parameters
 are the paper's: those with CF-detectability on all induced 4-taxon networks
-(`AllmanEtAl2023.cfDetectable_generic`, TINNiK's Theorem 1) and no centroid CF (`isGenericNull_centroid`). That
+(`Allman2023.cfDetectable_generic`, TINNiK's Theorem 1) and no centroid CF (`isGenericNull_centroid`). That
 `N` is binary is used by these two results, and `0 ≤ δ` is
 not used. -/
 theorem theorem4 [Fintype V] [Fintype E] {N : RootedNetwork V E X}
@@ -638,11 +638,11 @@ theorem theorem4 [Fintype V] [Fintype E] {N : RootedNetwork V E X}
             Tendsto (fun m => iidProb (geneTreeDist N θ 0) m fun ω =>
               tinnik ml (α m) β δ M (quartetCount unroot ω) = treeOfBlobs N) atTop (𝓝 1) := by
   have hne : Nonempty X := Fintype.card_pos_iff.mp (by omega)
-  refine ⟨{θ | N.IsMetric θ ∧ ¬ AllmanEtAl2023.CFDetectable N (nmscCF N θ 0)} ∪
+  refine ⟨{θ | N.IsMetric θ ∧ ¬ Allman2023.CFDetectable N (nmscCF N θ 0)} ∪
       {θ | N.IsMetric θ ∧ ¬ NoCentroidCF (nmscCF N θ 0)},
-    (AllmanEtAl2023.cfDetectable_generic hN hBin).union (isGenericNull_centroid hN hBin),
+    (Allman2023.cfDetectable_generic hN hBin).union (isGenericNull_centroid hN hBin),
     fun θ hθ hA => ?_⟩
-  have hdet : AllmanEtAl2023.CFDetectable N (nmscCF N θ 0) := by
+  have hdet : Allman2023.CFDetectable N (nmscCF N θ 0) := by
     by_contra hn
     exact hA (Or.inl ⟨hθ, hn⟩)
   have hcen : NoCentroidCF (nmscCF N θ 0) := by
@@ -657,7 +657,7 @@ This is stronger than the statement of the paper, whose `α_m` depends on the un
 Remark 8.3 points this out. -/
 theorem theorem4_explicit [Fintype V] [Fintype E] {N : RootedNetwork V E X}
     (hN : N.IsPhylogenetic) (hX : 4 ≤ Fintype.card X) {θ : MetricData E} (hθ : N.IsMetric θ)
-    (hdet : AllmanEtAl2023.CFDetectable N (nmscCF N θ 0)) {β δ : ℝ} (hβ : 0 < β) (hδ₂ : δ < 2)
+    (hdet : Allman2023.CFDetectable N (nmscCF N θ 0)) {β δ : ℝ} (hβ : 0 < β) (hδ₂ : δ < 2)
     {M : TreeBuilder X} (hM : IsExactBuilder M)
     {ml : (QuartetTree X → ℝ) → Finset X → QuartetTree X} (hml : IsMLSelection ml) :
     Tendsto (fun m : ℕ => iidProb (geneTreeDist N θ 0) m fun ω =>

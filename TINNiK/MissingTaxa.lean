@@ -1,6 +1,6 @@
 module
 
-public import TreeOfBlobs.Testing.MissingTaxa
+public import PhyloNetwork.Testing.MissingTaxa
 public import TINNiK.T3
 
 /-!
@@ -165,7 +165,7 @@ theorem tinnikOf_eq_of_goodOn {N : RootedNetwork V E X} (hN : N.IsPhylogenetic) 
   · exact fun q hq hnt => ⟨hq, Or.inr ((h q hq).2.2 hnt)⟩
   · rintro q ⟨hq, hor⟩
     refine ⟨hq, fun s hs hd => ?_⟩
-    exact hnot q hq ⟨s, hs, AllmanEtAl2023.inducedCutSplit_of_displays hN hd⟩ hor
+    exact hnot q hq ⟨s, hs, Allman2023.inducedCutSplit_of_displays hN hd⟩ hor
   · rintro s ⟨hn, hs⟩
     have hq := s.card_taxa
     have htl : IsTreelike N s.taxa := by
@@ -215,7 +215,7 @@ def T3RejectsOn (N : RootedNetwork V E X) (θ : MetricData E) (ρ : ℝ) (on : (
 
 /-- **On each set of four taxa the tests are right, with missing taxa**, for the cut test. -/
 theorem tendsto_goodOn_cut (hN : N.IsPhylogenetic) (hX : 4 ≤ Fintype.card X) (hθ : N.IsMetric θ) (hρ : 0 ≤ ρ ∧ ρ ≤ 1)
-    (hdet : AllmanEtAl2023.CFDetectable N (nmscCF N θ ρ)) (hon : Covers on) {α : ℕ → ℝ} (hα₀ : Tendsto α atTop (𝓝 0))
+    (hdet : Allman2023.CFDetectable N (nmscCF N θ ρ)) (hon : Covers on) {α : ℕ → ℝ} (hα₀ : Tendsto α atTop (𝓝 0))
     (hrej : RejectsOn N θ ρ on α) {β : ℝ} (hβ : 0 < β) {ml : (QuartetTree X → ℝ) → Finset X → QuartetTree X}
     (hml : IsMLSelection ml) {q : Finset X} (hq : q.card = 4) :
     Tendsto (fun m => iidProb (geneTreeDist N θ ρ) m fun ω =>
@@ -248,7 +248,7 @@ theorem tendsto_goodOn_cut (hN : N.IsPhylogenetic) (hX : 4 ≤ Fintype.card X) (
         QuartetTree.mem_alternatives.2 ⟨(mem_treesOn.1 hm1).trans hst.symm, hneq⟩
       exact absurd (hm2 s₀ hs₀) (not_le.2 (h₂ _ halt))
     refine ⟨h₁, fun s hsq hcs => ?_, fun hnt => absurd ⟨s₀, hs₀, hc₀⟩ hnt⟩
-    have hss : s = s₀ := AllmanEtAl2023.inducedCutSplit_unique hN hcs hc₀ ((mem_treesOn.1 hsq).trans hst.symm)
+    have hss : s = s₀ := Allman2023.inducedCutSplit_unique hN hcs hc₀ ((mem_treesOn.1 hsq).trans hst.symm)
     subst hss
     exact ⟨hml₀, h₃⟩
   · refine tendsto_iidProb_of_imp hd (Eventually.of_forall fun m ω hω => ?_)
@@ -289,7 +289,7 @@ theorem tendsto_goodOn_t3 (hN : N.IsPhylogenetic) (hX : 4 ≤ Fintype.card X) (h
         QuartetTree.mem_alternatives.2 ⟨(mem_treesOn.1 hm1).trans hst.symm, hneq⟩
       exact absurd (hm2 s₀ hs₀) (not_le.2 (h₂ _ halt))
     refine ⟨h₁, fun s hsq hcs => ?_, fun hnt => absurd ⟨s₀, hs₀, hc₀⟩ hnt⟩
-    have hss : s = s₀ := AllmanEtAl2023.inducedCutSplit_unique hN hcs hc₀ ((mem_treesOn.1 hsq).trans hst.symm)
+    have hss : s = s₀ := Allman2023.inducedCutSplit_unique hN hcs hc₀ ((mem_treesOn.1 hsq).trans hst.symm)
     subst hss
     exact ⟨hml₀, h₃⟩
   · refine tendsto_iidProb_of_imp hd (Eventually.of_forall fun m ω hω => ?_)
@@ -318,7 +318,7 @@ theorem tendsto_chiSqTwoTail_comp {k : ℕ → ℕ} (hk : Tendsto k atTop atTop)
 /-- **The levels of Theorem 4 with missing taxa**: as `exists_levels`, with `m` replaced in the level of each set of four taxa by the number of gene trees
 containing it. The gene trees that the levels come from are known; the limits `d` of the statistics are not. -/
 theorem exists_levels_on [Nonempty X] (hN : N.IsPhylogenetic) (hθ : N.IsMetric θ) (hρ : 0 ≤ ρ ∧ ρ ≤ 1)
-    (hdet : AllmanEtAl2023.CFDetectable N (nmscCF N θ ρ)) (hon : Covers on) :
+    (hdet : Allman2023.CFDetectable N (nmscCF N θ ρ)) (hon : Covers on) :
     ∃ α : ℕ → ℝ, Tendsto α atTop (𝓝 0) ∧ (∀ m, 0 < α m) ∧ RejectsOn N θ ρ on α := by
   have hd : IsDist (geneTreeDist N θ ρ) := ⟨geneTreeDist_nonneg hN hθ hρ, sum_geneTreeDist hN hθ hρ⟩
   let Q : Finset (Finset X) := univ.filter fun q => q.card = 4 ∧ ¬ IsTreelike N q
@@ -398,7 +398,7 @@ theorem exists_levels_t3_on [Nonempty X] (hN : N.IsPhylogenetic) (hθ : N.IsMetr
 /-- Levels known in advance: if `log α_m` is small against the number of gene trees containing each set of four taxa, the cut test rejects. With all
 taxa on all gene trees this is `TINNiK.rejects_of_log`. -/
 theorem rejectsOn_of_log [Nonempty X] (hN : N.IsPhylogenetic) (hθ : N.IsMetric θ) (hρ : 0 ≤ ρ ∧ ρ ≤ 1)
-    (hdet : AllmanEtAl2023.CFDetectable N (nmscCF N θ ρ)) (hon : Covers on) {α : ℕ → ℝ} (hα : ∀ m, 0 < α m)
+    (hdet : Allman2023.CFDetectable N (nmscCF N θ ρ)) (hon : Covers on) {α : ℕ → ℝ} (hα : ∀ m, 0 < α m)
     (hαlog : ∀ q : Finset X, q.card = 4 → Tendsto (fun m => Real.log (α m) / (coverCount (on m) q : ℕ)) atTop (𝓝 0)) :
     RejectsOn N θ ρ on α := by
   intro q hq4 hnt
@@ -423,7 +423,7 @@ theorem rejectsOn_of_log [Nonempty X] (hN : N.IsPhylogenetic) (hθ : N.IsMetric 
 
 /-- The tests are right on all sets of four taxa, with the cut test and missing taxa. -/
 theorem tests_correct_on (hN : N.IsPhylogenetic) (hX : 4 ≤ Fintype.card X) (hθ : N.IsMetric θ) (hρ : 0 ≤ ρ ∧ ρ ≤ 1)
-    (hdet : AllmanEtAl2023.CFDetectable N (nmscCF N θ ρ)) (hon : Covers on) {α : ℕ → ℝ} (hα₀ : Tendsto α atTop (𝓝 0))
+    (hdet : Allman2023.CFDetectable N (nmscCF N θ ρ)) (hon : Covers on) {α : ℕ → ℝ} (hα₀ : Tendsto α atTop (𝓝 0))
     (hrej : RejectsOn N θ ρ on α) {β : ℝ} (hβ : 0 < β) {ml : (QuartetTree X → ℝ) → Finset X → QuartetTree X}
     (hml : IsMLSelection ml) :
     Tendsto (fun m => iidProb (geneTreeDist N θ ρ) m fun ω => ∀ q : Finset X, q.card = 4 →
@@ -440,7 +440,7 @@ each set of four taxa is on more and more gene trees, then for levels `α_m → 
 builder and any selection of maximum likelihood topologies, the TINNiK algorithm on the counts of the gene trees with the taxa kept infers the tree of blobs,
 with probability tending to one. -/
 theorem theorem4_missing_of_rejects (hN : N.IsPhylogenetic) (hX : 4 ≤ Fintype.card X) (hθ : N.IsMetric θ)
-    (hρ : 0 ≤ ρ ∧ ρ ≤ 1) (hdet : AllmanEtAl2023.CFDetectable N (nmscCF N θ ρ)) (hon : Covers on)
+    (hρ : 0 ≤ ρ ∧ ρ ≤ 1) (hdet : Allman2023.CFDetectable N (nmscCF N θ ρ)) (hon : Covers on)
     {α : ℕ → ℝ} (hα₀ : Tendsto α atTop (𝓝 0)) (hrej : RejectsOn N θ ρ on α) {β δ : ℝ} (hβ : 0 < β) (hδ₂ : δ < 2)
     {M : TreeBuilder X} (hM : IsExactBuilder M) {ml : (QuartetTree X → ℝ) → Finset X → QuartetTree X}
     (hml : IsMLSelection ml) :
@@ -454,7 +454,7 @@ theorem theorem4_missing_of_rejects (hN : N.IsPhylogenetic) (hX : 4 ≤ Fintype.
 
 /-- **Theorem 4 with missing taxa at parameters with CF-detectability** (`tinnik:missing_taxa`), with the levels of `exists_levels_on`. -/
 theorem theorem4_missing_of_cfDetectable (hN : N.IsPhylogenetic) (hX : 4 ≤ Fintype.card X) (hθ : N.IsMetric θ)
-    (hρ : 0 ≤ ρ ∧ ρ ≤ 1) (hdet : AllmanEtAl2023.CFDetectable N (nmscCF N θ ρ)) (hon : Covers on) :
+    (hρ : 0 ≤ ρ ∧ ρ ≤ 1) (hdet : Allman2023.CFDetectable N (nmscCF N θ ρ)) (hon : Covers on) :
     ∃ α : ℕ → ℝ, Tendsto α atTop (𝓝 0) ∧ (∀ m, 0 < α m) ∧
       ∀ (β δ : ℝ), 0 < β → δ < 2 → ∀ (M : TreeBuilder X), IsExactBuilder M →
       ∀ (ml : (QuartetTree X → ℝ) → Finset X → QuartetTree X), IsMLSelection ml →
@@ -478,9 +478,9 @@ theorem theorem4_missing (hN : N.IsPhylogenetic) (hX : 4 ≤ Fintype.card X) (hB
           ∀ (ml : (QuartetTree X → ℝ) → Finset X → QuartetTree X), IsMLSelection ml →
             Tendsto (fun m => iidProb (geneTreeDist N θ 0) m fun ω =>
               tinnik ml (α m) β δ M (quartetCountOn unroot (on m) ω) = treeOfBlobs N) atTop (𝓝 1) := by
-  refine ⟨{θ | N.IsMetric θ ∧ ¬ AllmanEtAl2023.CFDetectable N (nmscCF N θ 0)},
-    AllmanEtAl2023.cfDetectable_generic hN hBin, fun θ hθ hA on hon => ?_⟩
-  have hdet : AllmanEtAl2023.CFDetectable N (nmscCF N θ 0) := by
+  refine ⟨{θ | N.IsMetric θ ∧ ¬ Allman2023.CFDetectable N (nmscCF N θ 0)},
+    Allman2023.cfDetectable_generic hN hBin, fun θ hθ hA on hon => ?_⟩
+  have hdet : Allman2023.CFDetectable N (nmscCF N θ 0) := by
     by_contra hn
     exact hA ⟨hθ, hn⟩
   obtain ⟨α, hα₀, hαpos, h⟩ := theorem4_missing_of_cfDetectable hN hX hθ ⟨le_rfl, zero_le_one⟩ hdet hon

@@ -3,8 +3,8 @@ module
 public import Mathlib.Probability.Distributions.Gaussian.Real
 public import Mathlib.Probability.ProbabilityMassFunction.Constructions
 public import Mathlib.MeasureTheory.Constructions.Pi
-public import TreeOfBlobs.ForMathlib.Analysis.SpecialFunctions.Erf
-public import TreeOfBlobs.Testing.Defs
+public import PhyloNetwork.ForMathlib.Analysis.SpecialFunctions.Erf
+public import PhyloNetwork.Testing.Defs
 public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 public import Mathlib.Tactic.Linarith
 public import Mathlib.Tactic.FinCases
