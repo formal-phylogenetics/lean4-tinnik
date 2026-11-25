@@ -3,7 +3,7 @@
 Source: E. S. Allman, H. Baños, J. D. Mitchell, J. A. Rhodes, *The tree of blobs of a species network:
 identifiability under the coalescent*, J. Math. Biol. 86 (2023), 10,
 <https://doi.org/10.1007/s00285-022-01838-9>. Read: the PMC author manuscript NIHMS1884071 and the arXiv
-TeX (2205.03466). It is a paper of the hub lean4-tob, formalized in its own repository,
+TeX (2205.03466). It is a paper of the hub lean4-phylo-tree-of-blobs, formalized in its own repository,
 [lean4-allman2023](https://github.com/vltanh/lean4-allman2023), which this repository requires; its
 [report](https://github.com/vltanh/lean4-allman2023/blob/main/docs/Allman2023/REPORT.md) is the audit
 of the source.
@@ -32,7 +32,7 @@ by `allman2023:`, and have the same row, with `proved = 0`, in [`docs/Tinnik/pap
 
 The statements use the definitions of lean4-allman2023 ([`Allman2023.CFDetectable`](https://github.com/vltanh/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/LargeNetworks/Rule.lean#L56), [`Allman2023.IsNonCut`](https://github.com/vltanh/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/LargeNetworks/Rule.lean#L45),
 [`Allman2023.deletionMetric`](https://github.com/vltanh/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/FourTaxa/GenericCF.lean#L60), [`Allman2023.IsBinaryNetwork`](https://github.com/vltanh/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/Networks/Definitions.lean#L63), [`Allman2023.Trd`](https://github.com/vltanh/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/Networks/BlobDefinitions.lean#L421)) and those of the
-libraries (networks, induced cut-edge splits, B-quartets, the closure [`BInferred`](https://github.com/vltanh/lean4-tob/blob/265ba443cb147a33ff2478cbc311a5597db1c1c7/TreeOfBlobs/Defs.lean#L132), the quartet
+libraries (networks, induced cut-edge splits, B-quartets, the closure [`BInferred`](https://github.com/vltanh/lean4-phylo-tree-of-blobs/blob/265ba443cb147a33ff2478cbc311a5597db1c1c7/TreeOfBlobs/Defs.lean#L132), the quartet
 distance). The claim of Section 5 that the outline is consistent, `allman2023:a:claim:outline-consistent`,
 is proved here from TINNiK's Theorem 4, for the outline with TINNiK's cut test, in
 [`Tinnik/Consistency/AllmanOutline.lean`](../../Consistency/AllmanOutline.lean).

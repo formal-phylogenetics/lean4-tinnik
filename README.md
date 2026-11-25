@@ -6,7 +6,7 @@ A Lean 4 formalization of E. S. Allman, H. Baños, J. D. Mitchell, J. A. Rhodes,
 
 Every numbered result of the paper is proved, by the paper's arguments except the departures that [Section 7 of the report](docs/Tinnik/REPORT.md#7-departures-from-the-papers-proofs) lists. The formalization is unconditional: no result of the literature is assumed, and there is no `sorry` or `axiom` outside the Challenge's statement. The maximum likelihood estimate of Appendix C.1 is read on the closed simplex, since on the open cut model it need not exist (E31): this is the one correction of a statement, and the user who requested this formalization agreed to it. No person has reviewed the proofs.
 
-This paper is one of the four of the hub [lean4-tob](https://github.com/vltanh/lean4-tob), a sub-hub of [lean4-phylo-network](https://github.com/vltanh/lean4-phylo-network), which presents them; it builds on Allman et al. 2023, formalized in [lean4-allman2023](https://github.com/vltanh/lean4-allman2023), and TOB-QMC, NANUQ and ECToBlob build on it.
+This paper is one of the four of the hub [lean4-phylo-tree-of-blobs](https://github.com/vltanh/lean4-phylo-tree-of-blobs), a sub-hub of [lean4-phylo-network](https://github.com/vltanh/lean4-phylo-network), which presents them; it builds on Allman et al. 2023, formalized in [lean4-allman2023](https://github.com/vltanh/lean4-allman2023), and TOB-QMC, NANUQ and ECToBlob build on it.
 
 ## Status
 
@@ -86,7 +86,7 @@ The gaps are repaired, and none changes a statement. [Section 3 of the report](d
 - [Mathlib](https://github.com/leanprover-community/mathlib4), at `v4.37.0-rc1`.
 - [lean4-phylogenetics](https://github.com/vltanh/lean4-phylogenetics), the library of the collection, pinned by commit in [`lakefile.toml`](lakefile.toml): networks, trees and quartets, the network multispecies coalescent and generic parameters, neighbor joining and Buneman's four-point theorem.
 - [lean4-phylo-network](https://github.com/vltanh/lean4-phylo-network), the library of the hub of network estimation, pinned by commit: the hypothesis tests on quartet counts, their limit laws, independent samples, and the sources Mitchell et al. 2019 and Rhodes 2020.
-- [lean4-tob](https://github.com/vltanh/lean4-tob), the library of this paper's hub, pinned by commit: the TINNiK algorithm and the closure under the B-quartet inference rule, and the counts of tree edges.
+- [lean4-phylo-tree-of-blobs](https://github.com/vltanh/lean4-phylo-tree-of-blobs), the library of this paper's hub, pinned by commit: the TINNiK algorithm and the closure under the B-quartet inference rule, and the counts of tree edges.
 - [lean4-allman2023](https://github.com/vltanh/lean4-allman2023), Allman et al. 2023, pinned by commit: TINNiK's Theorems 1, 2 and 3, and the steps of their proofs that the proofs here use, which [`Tinnik/External/Allman2023/`](Tinnik/External/Allman2023) states and proves from its theorems.
 
 ## Palomar
@@ -109,7 +109,7 @@ python3 scripts/linkify_docs.py                                       # the docu
 
 - Toolchain: Lean and Mathlib `v4.37.0-rc1` ([`lean-toolchain`](lean-toolchain), [`lake-manifest.json`](lake-manifest.json)).
 - `lake comparator`, `leanexport` and `con-ron` come from the toolchain, under `lake env`. The kernels' replays need much memory.
-- [lean4-tob's `docs/CONFIGURATION.md`](https://github.com/vltanh/lean4-tob/blob/05a024a837076455c700e5d0f88637aa22432b45/docs/CONFIGURATION.md) records the versions, the decisions, and what "line N" means.
+- [lean4-phylo-tree-of-blobs's `docs/CONFIGURATION.md`](https://github.com/vltanh/lean4-phylo-tree-of-blobs/blob/05a024a837076455c700e5d0f88637aa22432b45/docs/CONFIGURATION.md) records the versions, the decisions, and what "line N" means.
 
 ## Layout
 
@@ -134,7 +134,7 @@ From [Section 10 of the report](docs/Tinnik/REPORT.md#10-the-paper-in-the-litera
 - No other formalization of TINNiK was found.
 - Before: SNaQ, Baños 2019 and NANUQ infer level-1 networks from quartets. Allman et al. 2023 showed that the tree of blobs is identifiable from gene quartet distributions, with no assumption on the level, and TINNiK makes this an algorithm with a consistency theorem. We found no earlier proof of its Theorem 4.
 - Concurrent: Huber et al. 2025 and Frohn et al. 2025 determine the tree of blobs from exact quarnet information, with no statistical model. Both appeared after the TINNiK preprint and do not build on its algorithm.
-- Since: TOB-QMC and ECToBlob, formalized in their own repositories of the hub lean4-tob ([TOB-QMC](https://github.com/vltanh/lean4-tob-qmc/blob/main/README.md), [ECToBlob](https://github.com/vltanh/lean4-ectoblob/blob/main/README.md)), describe TINNiK as the first algorithm for the problem and build on its tests. NANUQ⁺ and the outline of Holtgrefe et al. 2025 start from its tree of blobs, SEQUoIA uses its functions, and MSCquartets 3.3 implements it. We found no erratum to TINNiK.
+- Since: TOB-QMC and ECToBlob, formalized in their own repositories of the hub lean4-phylo-tree-of-blobs ([TOB-QMC](https://github.com/vltanh/lean4-tob-qmc/blob/main/README.md), [ECToBlob](https://github.com/vltanh/lean4-ectoblob/blob/main/README.md)), describe TINNiK as the first algorithm for the problem and build on its tests. NANUQ⁺ and the outline of Holtgrefe et al. 2025 start from its tree of blobs, SEQUoIA uses its functions, and MSCquartets 3.3 implements it. We found no erratum to TINNiK.
 
 ## What's next
 
@@ -144,7 +144,7 @@ Theorem 4 is proved for binary networks under independent inheritance, `ρ = 0`.
 
 - Requested and supervised by The-Anh Vu-Le, who chose the paper, agreed to the correction of its Appendix C.1 (E31), and decided the library's boundary and the project's layout. **No person has reviewed the proofs.** Independent agents reviewed the statements and compared the proofs with the paper.
 - Codex made the source audit and first foundations of the collection, on 2026-10-27. Claude (Opus 5.5) in Claude Code, with sub-agents, wrote the statements, proofs, audit and documents, following the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) procedure.
-- Made in lean4-tob on 2026-10-27 and from 2026-10-31 to 2026-11-01, with the other papers of the collection. [`docs/Tinnik/CREDITS.md`](docs/Tinnik/CREDITS.md) and lean4-tob's [`docs/CREDITS.md`](https://github.com/vltanh/lean4-tob/blob/05a024a837076455c700e5d0f88637aa22432b45/docs/CREDITS.md) have the details.
+- Made in lean4-phylo-tree-of-blobs on 2026-10-27 and from 2026-10-31 to 2026-11-01, with the other papers of the collection. [`docs/Tinnik/CREDITS.md`](docs/Tinnik/CREDITS.md) and lean4-phylo-tree-of-blobs's [`docs/CREDITS.md`](https://github.com/vltanh/lean4-phylo-tree-of-blobs/blob/05a024a837076455c700e5d0f88637aa22432b45/docs/CREDITS.md) have the details.
 
 ## License
 
