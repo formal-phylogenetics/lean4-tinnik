@@ -6,7 +6,7 @@ A Lean 4 formalization of Elizabeth S. Allman, Hector Baños, Jonathan D. Mitche
 
 Every numbered result of the paper is proved, by the paper's arguments except the departures that [Section 7 of the report](docs/Tinnik/REPORT.md#7-departures-from-the-papers-proofs) lists. The formalization is unconditional: no result of the literature is assumed, and there is no `sorry` or `axiom` outside the Challenge's statement. The maximum likelihood estimate of Appendix C.1 is read on the closed simplex, since on the open cut model it need not exist (E31): this is the one correction of a statement, and the user who requested this formalization agreed to it. No person has reviewed the proofs.
 
-This paper is one of the hub [lean4-phylo-tree-of-blobs](https://github.com/vltanh/lean4-phylo-tree-of-blobs), on the tree of blobs of a phylogenetic network, a sub-hub of [lean4-phylo-network](https://github.com/vltanh/lean4-phylo-network), in the collection rooted at [lean4-phylogenetics](https://github.com/vltanh/lean4-phylogenetics). It builds on Allman et al. 2023, formalized in [lean4-allman2023](https://github.com/vltanh/lean4-allman2023), and TOB-QMC, NANUQ and ECToBlob build on it.
+This paper belongs to the hub [lean4-phylo-tree-of-blobs](https://github.com/vltanh/lean4-phylo-tree-of-blobs), on the tree of blobs of a phylogenetic network, a sub-hub of [lean4-phylo-network](https://github.com/vltanh/lean4-phylo-network), in the collection rooted at [lean4-phylogenetics](https://github.com/vltanh/lean4-phylogenetics). It builds on Allman et al. 2023, formalized in [lean4-allman2023](https://github.com/vltanh/lean4-allman2023), and TOB-QMC, NANUQ and ECToBlob build on it.
 
 ## Status
 
