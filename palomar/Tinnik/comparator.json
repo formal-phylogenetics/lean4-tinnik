@@ -1,15 +1,8 @@
 {
-  "challenge_module": "TINNiK.MainResults",
-  "solution_module": "TINNiK.MainResults",
+  "challenge_module": "Tinnik.Challenge",
+  "solution_module": "Tinnik.Solution",
   "theorem_names": [
-    "TreeOfBlobs.theorem4",
-    "TreeOfBlobs.tinnik_theorem4_missing",
-    "TreeOfBlobs.mitchell_proposition4_1",
-    "TreeOfBlobs.mitchell_proposition4_2",
-    "TreeOfBlobs.mitchell_proposition5_1",
-    "TreeOfBlobs.mitchell_proposition5_2",
-    "TreeOfBlobs.tinnik_not_exists_generatingCutModel_maximizer",
-    "TreeOfBlobs.studierKeppler_not_lemmaAsPrinted"
+    "TinnikChallenge.theorem4"
   ],
   "definition_names": [],
   "permitted_axioms": [

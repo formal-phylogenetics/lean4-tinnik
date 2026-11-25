@@ -2,7 +2,7 @@ name = "Tinnik"
 version = "0.1.0"
 keywords = ["math", "phylogenetics"]
 description = "A Lean 4 formalization of TINNiK (Allman, Baños, Mitchell, Rhodes 2024)"
-defaultTargets = ["Tinnik"]
+defaultTargets = ["Tinnik", "Palomar"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -48,3 +48,12 @@ rev = "v4.37.0-rc1"
 [[lean_lib]]
 name = "Tinnik"
 globs = ["Tinnik.+"]
+
+# The paper's Challenge and Solution, the modules Tinnik.Challenge and Tinnik.Solution of the source
+# directory palomar/ (Comparator: palomar/Tinnik/comparator.json). Declared last: Lake gives a module
+# to the last library whose patterns match it, and the glob above matches these names when the
+# paper's name is the root.
+[[lean_lib]]
+name = "Palomar"
+srcDir = "palomar"
+roots = ["Tinnik.Challenge", "Tinnik.Solution"]
