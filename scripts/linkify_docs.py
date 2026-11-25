@@ -62,10 +62,11 @@ PATH_BASES = {'': ['.github/workflows', 'docs/Tinnik', 'palomar/Tinnik'],
 # are not published. Any other path that git ignores is not linked either.
 PRIVATE = ('notes',)
 # The libraries that this project requires, by package, and where their sources are published.
-LIBRARIES = {'Phylogenetics': 'https://github.com/vltanh/lean4-phylogenetics/blob/',
-             'PhyloNetwork': 'https://github.com/vltanh/lean4-phylo-network/blob/',
-             'TreeOfBlobs': 'https://github.com/vltanh/lean4-phylo-tree-of-blobs/blob/',
-             'Allman2023': 'https://github.com/vltanh/lean4-allman2023/blob/'}
+GITHUB = 'https://github.com/formal-phylogenetics/'
+LIBRARIES = {'Phylogenetics': GITHUB + 'lean4-phylogenetics/blob/',
+             'PhyloNetwork': GITHUB + 'lean4-phylo-network/blob/',
+             'TreeOfBlobs': GITHUB + 'lean4-phylo-tree-of-blobs/blob/',
+             'Allman2023': GITHUB + 'lean4-allman2023/blob/'}
 # ---------------------------------------------------------------------------------------------
 
 ROOT = Path(__file__).resolve().parent.parent

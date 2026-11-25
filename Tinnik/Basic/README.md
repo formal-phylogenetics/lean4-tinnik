@@ -17,7 +17,7 @@ rotations and polar densities of the figures of Proposition 6 ([`Tinnik.Prop6.ro
 [`Tinnik.Prop6.polarDensity_rotated_pi_div_two_add`](../AppendixC/Proposition6.lean#L281), …), and the sets of four taxa that share three
 taxa, with their labels ([`Tinnik.exists_labels`](../Algorithms/Counts.lean#L287), [`Tinnik.labels_of_card_five`](../Algorithms/Counts.lean#L240)).
 
-The counts of the B-quartet Inference Algorithm also use [`Finset.ne_of_card_eq_five`](https://github.com/vltanh/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/Basic/Data/Finset/Card.lean#L28), the general lemma
+The counts of the B-quartet Inference Algorithm also use [`Finset.ne_of_card_eq_five`](https://github.com/formal-phylogenetics/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/Basic/Data/Finset/Card.lean#L28), the general lemma
 that the elements of a set of five are distinct, from lean4-allman2023's `Allman2023/Basic/`: needed by two
 repositories, it belongs in lean4-phylogenetics.
 
