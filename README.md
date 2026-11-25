@@ -138,7 +138,7 @@ From [Section 10 of the report](docs/Tinnik/REPORT.md#10-the-paper-in-the-litera
 
 ## What's next
 
-Theorem 4 is proved for binary networks under independent inheritance, `ρ = 0`. Extending it to common or correlated inheritance needs CF-detectability at generic parameters for other `ρ`, and extending it to non-binary networks needs a condition such as no trivial 4-blob on any set of four taxa. [Section 11 of the report](docs/Tinnik/REPORT.md#11-whats-next) has these, and the simpler arguments that the formalization found, among them that CF-detectability already excludes the centroid in the proof of Theorem 4. A private `NEXT.md` holds the candidate follow-up papers.
+Theorem 4 is proved for binary networks under independent inheritance, `ρ = 0`. Extending it to common or correlated inheritance needs CF-detectability at generic parameters for other `ρ`, and extending it to non-binary networks needs a condition such as no trivial 4-blob on any set of four taxa. [Section 11 of the report](docs/Tinnik/REPORT.md#11-whats-next) has these, and the simpler arguments that the formalization found, among them that CF-detectability already excludes the centroid in the proof of Theorem 4.
 
 ## Credits
 
