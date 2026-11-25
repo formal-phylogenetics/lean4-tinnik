@@ -165,7 +165,7 @@ theorem tinnikOf_eq_of_goodOn {N : RootedNetwork V E X} (hN : N.IsPhylogenetic) 
   · exact fun q hq hnt => ⟨hq, Or.inr ((h q hq).2.2 hnt)⟩
   · rintro q ⟨hq, hor⟩
     refine ⟨hq, fun s hs hd => ?_⟩
-    exact hnot q hq ⟨s, hs, Allman2023.inducedCutSplit_of_displays hN hd⟩ hor
+    exact hnot q hq ⟨s, hs, External.Allman2023.inducedCutSplit_of_displays hN hd⟩ hor
   · rintro s ⟨hn, hs⟩
     have hq := s.card_taxa
     have htl : IsTreelike N s.taxa := by
@@ -248,7 +248,7 @@ theorem tendsto_goodOn_cut (hN : N.IsPhylogenetic) (hX : 4 ≤ Fintype.card X) (
         QuartetTree.mem_alternatives.2 ⟨(mem_treesOn.1 hm1).trans hst.symm, hneq⟩
       exact absurd (hm2 s₀ hs₀) (not_le.2 (h₂ _ halt))
     refine ⟨h₁, fun s hsq hcs => ?_, fun hnt => absurd ⟨s₀, hs₀, hc₀⟩ hnt⟩
-    have hss : s = s₀ := Allman2023.inducedCutSplit_unique hN hcs hc₀ ((mem_treesOn.1 hsq).trans hst.symm)
+    have hss : s = s₀ := External.Allman2023.inducedCutSplit_unique hN hcs hc₀ ((mem_treesOn.1 hsq).trans hst.symm)
     subst hss
     exact ⟨hml₀, h₃⟩
   · refine tendsto_iidProb_of_imp hd (Eventually.of_forall fun m ω hω => ?_)
@@ -289,7 +289,7 @@ theorem tendsto_goodOn_t3 (hN : N.IsPhylogenetic) (hX : 4 ≤ Fintype.card X) (h
         QuartetTree.mem_alternatives.2 ⟨(mem_treesOn.1 hm1).trans hst.symm, hneq⟩
       exact absurd (hm2 s₀ hs₀) (not_le.2 (h₂ _ halt))
     refine ⟨h₁, fun s hsq hcs => ?_, fun hnt => absurd ⟨s₀, hs₀, hc₀⟩ hnt⟩
-    have hss : s = s₀ := Allman2023.inducedCutSplit_unique hN hcs hc₀ ((mem_treesOn.1 hsq).trans hst.symm)
+    have hss : s = s₀ := External.Allman2023.inducedCutSplit_unique hN hcs hc₀ ((mem_treesOn.1 hsq).trans hst.symm)
     subst hss
     exact ⟨hml₀, h₃⟩
   · refine tendsto_iidProb_of_imp hd (Eventually.of_forall fun m ω hω => ?_)
@@ -479,7 +479,7 @@ theorem theorem4_missing (hN : N.IsPhylogenetic) (hX : 4 ≤ Fintype.card X) (hB
             Tendsto (fun m => iidProb (geneTreeDist N θ 0) m fun ω =>
               tinnik ml (α m) β δ M (quartetCountOn unroot (on m) ω) = treeOfBlobs N) atTop (𝓝 1) := by
   refine ⟨{θ | N.IsMetric θ ∧ ¬ Allman2023.CFDetectable N (nmscCF N θ 0)},
-    Allman2023.cfDetectable_generic hN hBin, fun θ hθ hA on hon => ?_⟩
+    External.Allman2023.cfDetectable_generic hN hBin, fun θ hθ hA on hon => ?_⟩
   have hdet : Allman2023.CFDetectable N (nmscCF N θ 0) := by
     by_contra hn
     exact hA ⟨hθ, hn⟩

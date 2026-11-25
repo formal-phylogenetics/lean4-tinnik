@@ -1,10 +1,8 @@
 module
 
-public import Allman2023.MainResult.Algorithm
-public import Allman2023.LargeNetworks.Rule
-public import Allman2023.FourTaxa.CFDetectable
-public import Allman2023.LargeNetworks.CutOrder
-public import Allman2023.FourTaxa.GenericCF
+public import Tinnik.External.Allman2023.Algorithm
+public import Tinnik.External.Allman2023.Rule
+public import Tinnik.External.Allman2023.CFDetectable
 public import TreeOfBlobs.Defs
 public import PhyloNetwork.External.Rhodes2020.Theorem2
 public import Phylogenetics.NMSC.Analytic
@@ -19,10 +17,10 @@ public import Tinnik.AppendixC.LikelihoodRatio
 # TINNiK: consistency of the algorithm
 
 The count of Step 3(a)(i) (E29 of the report), and Theorem 4. Theorem 4 takes the CF-detectability of 4-blobs from
-`Allman2023.cfDetectable_generic` (TINNiK's Theorem 1 on the induced 4-taxon networks, from the proof of Allman et al.'s Corollary 1, in
-`src/Allman2023/CFDetectable.lean`), and excludes the centroid by the analytic argument of the paper
-(`isGenericNull_centroid`). Theorem 2 and the combinatorial part of Theorem 3 are proved in
-`src/Allman2023/Basic.lean`.
+`External.Allman2023.cfDetectable_generic` (TINNiK's Theorem 1 on the induced 4-taxon networks, from the proof of Allman et al.'s
+Corollary 1, in lean4-allman2023), and excludes the centroid by the analytic argument of the paper
+(`isGenericNull_centroid`). Theorem 2 and the combinatorial part of Theorem 3 are `External.Allman2023.closure_sound` and
+`External.Allman2023.closure_complete`, from lean4-allman2023.
 -/
 
 @[expose] public noncomputable section
@@ -114,7 +112,7 @@ theorem quartetDistance_congr {Bq Bq' : Set (Finset X)} {τ τ' : Set (QuartetTr
     quartetDistance Bq τ = quartetDistance Bq' τ' := by
   subst h2
   funext x y
-  exact Allman2023.Algorithm.quartetDistance_congr h1 x y
+  exact External.Allman2023.quartetDistance_congr h1 x y
 
 /-- The deterministic part of Theorem 4: from correct answers on all 4-taxon sets the algorithm returns
 the tree of blobs. The closure identifies the B-quartets (`closure_complete`, `closure_sound`); the
@@ -136,14 +134,14 @@ private theorem tinnik_eq_of_tests {V E : Type*} {N : RootedNetwork V E X} (hN :
     simp only [Set.mem_ofPred_eq]
     constructor
     · intro h
-      exact ⟨Allman2023.Algorithm.card_of_bInferred (B₀ := {q' | q'.card = 4 ∧ ¬ IsTreelike N q'}) (fun q hq => hq.1) h,
-        Allman2023.closure_sound hN h⟩
+      exact ⟨External.Allman2023.card_of_bInferred (B₀ := {q' | q'.card = 4 ∧ ¬ IsTreelike N q'}) (fun q hq => hq.1) h,
+        External.Allman2023.closure_sound hN h⟩
     · rintro ⟨h4, h⟩
-      exact Allman2023.closure_complete hN h4 h
+      exact External.Allman2023.closure_complete hN h4 h
   have hτ : {s : QuartetTree X | s ∈ {s | InducedCutSplit N s} ∧
       s.taxa ∉ {q | q.card = 4 ∧ IsBQuartet N q}} = {s | Displays (treeOfBlobs N) s} := by
     ext s
-    simp only [Set.mem_ofPred_eq, Allman2023.displays_treeOfBlobs_iff hN s,
+    simp only [Set.mem_ofPred_eq, External.Allman2023.displays_treeOfBlobs_iff hN s,
       QuartetTree.card_taxa, true_and]
   have hdist : quartetDistance {q | q.card = 4 ∧ IsBQuartet N q}
       {s | Displays (treeOfBlobs N) s} =
@@ -409,9 +407,9 @@ theorem isGenericNull_centroid [Fintype V] [Fintype E] {N : RootedNetwork V E X}
     by_cases htl : IsTreelike N q
     · obtain ⟨s, hs, hc⟩ := htl
       obtain ⟨D, hD, -⟩ := exists_isDeletion_unique_parent hN
-      obtain ⟨e, he⟩ := (Allman2023.inducedCutSplit_iff_exists_splitOffAt hN _).mp hc
-      have hlt := Allman2023.three_quarters_lt_nmscCF hN hD (ℓ := fun _ => 3)
-        (fun _ => by norm_num) rfl (Allman2023.splitOffAt_mono (Set.empty_subset D) he)
+      obtain ⟨e, he⟩ := (External.Allman2023.inducedCutSplit_iff_exists_splitOffAt hN _).mp hc
+      have hlt := External.Allman2023.three_quarters_lt_nmscCF hN hD (ℓ := fun _ => 3)
+        (fun _ => by norm_num) rfl (External.Allman2023.splitOffAt_mono (Set.empty_subset D) he)
       have hne : nmscCF N (Allman2023.deletionMetric N D fun _ => 3) 0 s ≠ 1 / 3 := by
         intro h
         rw [h] at hlt
@@ -419,9 +417,9 @@ theorem isGenericNull_centroid [Fintype V] [Fintype E] {N : RootedNetwork V E X}
       refine (Phylogenetics.RootedNetwork.isGenericNull_of_analyticOnNhd
         (F := fun θ => nmscCF N θ 0 s - 1 / 3)
         (fun d => (analyticOnNhd_nmscCF_coordMetric N d 0 s).sub analyticOnNhd_const)
-        (Allman2023.isNormalized_deletionMetric hN hD _) (sub_ne_zero.2 hne)).mono ?_
+        (External.Allman2023.isNormalized_deletionMetric hN hD _) (sub_ne_zero.2 hne)).mono ?_
       exact fun θ hθ => ⟨hθ.1, sub_eq_zero.2 (hθ.2 s hs)⟩
-    · exact (Allman2023.isGenericNull_not_isNonCut hN hBin hq htl).mono fun θ hθ =>
+    · exact (External.Allman2023.isGenericNull_not_isNonCut hN hBin hq htl).mono fun θ hθ =>
         ⟨hθ.1, fun hnc => hnc r hr r' hr' hrr ((hθ.2 r hr).trans (hθ.2 r' hr').symm)⟩
   refine (IsGenericNull.iUnion key).mono ?_
   rintro θ ⟨hθ, hnot⟩
@@ -457,7 +455,7 @@ private theorem tendsto_qGood {V E : Type*} [Fintype V] [Fintype E] {N : RootedN
       refine tendsto_iidProb_of_imp hd (Eventually.of_forall fun m ω hω => ?_)
         (tendsto_good_cut hN hθ hρ hα₀ hml (hdet.cut s₀ hc₀))
       refine ⟨fun s hsq hcs => ?_, fun hnt => absurd ⟨s₀, hs₀, hc₀⟩ hnt⟩
-      have hss : s = s₀ := Allman2023.inducedCutSplit_unique hN hcs hc₀
+      have hss : s = s₀ := External.Allman2023.inducedCutSplit_unique hN hcs hc₀
         (Finset.mem_filter.mp hsq).2
       subst hss
       exact hω
@@ -613,7 +611,7 @@ sequence `α_m → 0` such that for any `β > 0` and `2 > δ ≥ 0`, the TINNiK 
 `m` independent gene trees from the NMSC infers the tree of blobs with probability tending to one. The
 sequence is the paper's (`exists_levels`), built from the limits `d` of the statistics. The generic parameters
 are the paper's: those with CF-detectability on all induced 4-taxon networks
-(`Allman2023.cfDetectable_generic`, TINNiK's Theorem 1) and no centroid CF (`isGenericNull_centroid`). That
+(`External.Allman2023.cfDetectable_generic`, TINNiK's Theorem 1) and no centroid CF (`isGenericNull_centroid`). That
 `N` is binary is used by these two results, and `0 ≤ δ` is
 not used. -/
 theorem theorem4 [Fintype V] [Fintype E] {N : RootedNetwork V E X}
@@ -629,7 +627,7 @@ theorem theorem4 [Fintype V] [Fintype E] {N : RootedNetwork V E X}
   have hne : Nonempty X := Fintype.card_pos_iff.mp (by omega)
   refine ⟨{θ | N.IsMetric θ ∧ ¬ Allman2023.CFDetectable N (nmscCF N θ 0)} ∪
       {θ | N.IsMetric θ ∧ ¬ NoCentroidCF (nmscCF N θ 0)},
-    (Allman2023.cfDetectable_generic hN hBin).union (isGenericNull_centroid hN hBin),
+    (External.Allman2023.cfDetectable_generic hN hBin).union (isGenericNull_centroid hN hBin),
     fun θ hθ hA => ?_⟩
   have hdet : Allman2023.CFDetectable N (nmscCF N θ 0) := by
     by_contra hn

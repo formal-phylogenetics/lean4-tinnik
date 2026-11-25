@@ -1,6 +1,6 @@
 module
 
-public import Allman2023.LargeNetworks.Rule
+public import Tinnik.External.Allman2023.Rule
 public import TreeOfBlobs.Defs
 public import Phylogenetics.NMSC.Defs
 public import PhyloNetwork.Testing.Defs

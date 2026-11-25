@@ -35,11 +35,12 @@ from pathlib import Path
 # ---- configuration -------------------------------------------------------------------------
 # The Markdown documents to process.
 DOCS = ['README.md', 'docs/Tinnik/REPORT.md', 'docs/Tinnik/CREDITS.md', 'Tinnik/Basic/README.md',
-        'Tinnik/External/README.md', 'Tinnik/External/StudierKeppler1988/README.md']
+        'Tinnik/External/README.md', 'Tinnik/External/Allman2023/README.md',
+        'Tinnik/External/StudierKeppler1988/README.md']
 # Namespaces in which the documents name declarations without their prefix: the paper's library,
 # the sources it cites, the library `Phylogenetics`, then the Challenge.
-NAMESPACES = ['Tinnik', 'Tinnik.Prop6', 'External', 'External.StudierKeppler1988', 'Phylogenetics',
-              'TinnikChallenge']
+NAMESPACES = ['Tinnik', 'Tinnik.Prop6', 'External', 'External.Allman2023', 'External.StudierKeppler1988',
+              'Phylogenetics', 'TinnikChallenge']
 # With several papers in one repository: the namespaces of the documents in each top-level
 # directory, tried before `NAMESPACES` (formalize-math-paper, references/multi-paper.md).
 NAMESPACES_BY_DIR = {}

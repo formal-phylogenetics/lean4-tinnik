@@ -49,7 +49,7 @@ sources:
     type: "article"
     location: "https://doi.org/10.1007/s00285-022-01838-9"
     relationship: "background"
-    note: "Cited; Theorem 4 rests on its CF-detectability of 4-blobs and its inference rule. It is formalized in its own repository, lean4-allman2023."
+    note: "Cited; Theorem 4 rests on its CF-detectability of 4-blobs and its inference rule (TINNiK's Theorems 1, 2 and 3). It is formalized in its own repository, lean4-allman2023. The results that the proofs use are stated in Tinnik/External/Allman2023 and proved from that repository's theorems: External.Allman2023.cfDetectable_generic from Allman2023.cfDetectable_generic, External.Allman2023.closure_sound from Allman2023.closure_sound, External.Allman2023.closure_complete from Allman2023.closure_complete, and the steps of its proofs listed in that directory's README."
     author_endorsement: "not-contacted"
   - title: "Hypothesis testing near singularities and boundaries"
     authors:

@@ -1,8 +1,7 @@
 module
 
-public import Allman2023.LargeNetworks.Rule
-public import Allman2023.FourTaxa.CFDetectable
-public import Allman2023.LargeNetworks.CutOrder
+public import Tinnik.External.Allman2023.Rule
+public import Tinnik.External.Allman2023.CFDetectable
 public import TreeOfBlobs.Defs
 public import PhyloNetwork.External.MitchellAllmanRhodes2019.T3Test
 public import PhyloNetwork.External.Rhodes2020.Theorem2
@@ -211,12 +210,12 @@ private theorem tinnikT3_eq_of_tests {V E : Type*} {N : RootedNetwork V E X} (hN
     simp only [Set.mem_ofPred_eq]
     constructor
     · intro h
-      exact ⟨Allman2023.Algorithm.card_of_bInferred (B₀ := {q' | q'.card = 4 ∧ ¬ IsTreelike N q'}) (fun q hq => hq.1) h,
-        Allman2023.closure_sound hN h⟩
+      exact ⟨External.Allman2023.card_of_bInferred (B₀ := {q' | q'.card = 4 ∧ ¬ IsTreelike N q'}) (fun q hq => hq.1) h,
+        External.Allman2023.closure_sound hN h⟩
     · rintro ⟨h4, h⟩
-      exact Allman2023.closure_complete hN h4 h
+      exact External.Allman2023.closure_complete hN h4 h
   · ext s
-    simp only [Set.mem_ofPred_eq, Allman2023.displays_treeOfBlobs_iff hN s,
+    simp only [Set.mem_ofPred_eq, External.Allman2023.displays_treeOfBlobs_iff hN s,
       QuartetTree.card_taxa, true_and]
 
 /-- The answers wanted on a set of four taxa: the star test rejects; a cut-edge split on the induced network is the maximum
@@ -327,7 +326,7 @@ private theorem tendsto_qGoodT3 {V E : Type*} [Fintype V] [Fintype E] {N : Roote
       refine tendsto_iidProb_of_imp hd (Eventually.of_forall fun m ω hω => ?_)
         (tendsto_good_t3 hN hθ hρ hα₀ hml (hdet.cut s₀ hc₀))
       refine ⟨fun s hsq hcs => ?_, fun hnt => absurd ⟨s₀, hs₀, hc₀⟩ hnt⟩
-      have hss : s = s₀ := Allman2023.inducedCutSplit_unique hN hcs hc₀
+      have hss : s = s₀ := External.Allman2023.inducedCutSplit_unique hN hcs hc₀
         (Finset.mem_filter.mp hsq).2
       subst hss
       exact hω
@@ -458,7 +457,7 @@ the T3 test on `m` independent gene trees from the NMSC infers the tree of blobs
 
 TINNiK states Theorem 4 "using the cut test", and states no consistency theorem for the T3 test; it says that it "can be reasonable
 to assume that an unknown network has no anomalous quartets and use a T3 hypothesis test" (TINNiK's text, line 144).
-The generic parameters are those with CF-detectability on all induced 4-taxon networks (`Allman2023.cfDetectable_generic`, TINNiK's
+The generic parameters are those with CF-detectability on all induced 4-taxon networks (`External.Allman2023.cfDetectable_generic`, TINNiK's
 Theorem 1). Having no anomalous quartets is a hypothesis on the parameters, not a generic property: anomalous quartets occur "for some
 numerical parameter settings" (TOB-QMC v5, lines 118–120). It excludes the centroid (`noCentroidCF_of_t3Detectable`), so that the paper's
 separate generic step for the centroid (`isGenericNull_centroid`) is not needed. -/
@@ -474,7 +473,7 @@ theorem theorem4T3 [Fintype V] [Fintype E] {N : RootedNetwork V E X}
               tinnikT3 ml (α m) β δ M (quartetCount unroot ω) = treeOfBlobs N) atTop (𝓝 1) := by
   have hne : Nonempty X := Fintype.card_pos_iff.mp (by omega)
   refine ⟨{θ | N.IsMetric θ ∧ ¬ Allman2023.CFDetectable N (nmscCF N θ 0)},
-    Allman2023.cfDetectable_generic hN hBin, fun θ hθ hA hno => ?_⟩
+    External.Allman2023.cfDetectable_generic hN hBin, fun θ hθ hA hno => ?_⟩
   have hdet : Allman2023.CFDetectable N (nmscCF N θ 0) := by
     by_contra hn
     exact hA ⟨hθ, hn⟩
@@ -544,7 +543,7 @@ theorem closure_eq_of_relaxed {V E : Type*} {N : RootedNetwork V E X} (hN : N.Is
       BInferred {q' | q'.card = 4 ∧ ¬ IsTreelike N q'} {s | InducedCutSplit N s} q := by
     intro q h
     induction h with
-    | base q hq => exact Allman2023.closure_complete hN (h2 q hq).1 (h2 q hq).2
+    | base q hq => exact External.Allman2023.closure_complete hN (h2 q hq).1 (h2 q hq).2
     | ruleB a b c d e t q h5 _ _ ht _ hq ih₁ ih₂ ih₃ => exact .ruleB a b c d e t q h5 ih₁ ih₂ ht ih₃ hq
     | ruleT a b c d e s q h5 _ _ hs hst hsep hq ih₁ ih₂ =>
       exact .ruleT a b c d e s q h5 ih₁ ih₂ (h3 s hs) hst hsep hq
@@ -553,10 +552,10 @@ theorem closure_eq_of_relaxed {V E : Type*} {N : RootedNetwork V E X} (hN : N.Is
   constructor
   · intro h
     have hf := hfrom q h
-    exact ⟨Allman2023.Algorithm.card_of_bInferred (B₀ := {q' | q'.card = 4 ∧ ¬ IsTreelike N q'}) (fun q hq => hq.1) hf,
-      Allman2023.closure_sound hN hf⟩
+    exact ⟨External.Allman2023.card_of_bInferred (B₀ := {q' | q'.card = 4 ∧ ¬ IsTreelike N q'}) (fun q hq => hq.1) hf,
+      External.Allman2023.closure_sound hN hf⟩
   · rintro ⟨h4', h⟩
-    exact hto q (Allman2023.closure_complete hN h4' h)
+    exact hto q (External.Allman2023.closure_complete hN h4' h)
 
 /-- The deterministic part from the relaxed answers of `closure_eq_of_relaxed`. -/
 theorem tinnikOf_eq_of_relaxed {V E : Type*} {N : RootedNetwork V E X} (hN : N.IsPhylogenetic)
@@ -570,7 +569,7 @@ theorem tinnikOf_eq_of_relaxed {V E : Type*} {N : RootedNetwork V E X} (hN : N.I
   refine tinnikOf_eq_of_closure hN hX hδ₂ hM (closure_eq_of_relaxed hN h1 h2 h3 h4) ?_
   ext s
   simp only [Set.mem_ofPred_eq, QuartetTree.card_taxa, true_and,
-    Allman2023.displays_treeOfBlobs_iff hN s]
+    External.Allman2023.displays_treeOfBlobs_iff hN s]
   constructor
   · rintro ⟨hτ, hB⟩
     exact ⟨h3 s hτ, hB⟩
@@ -606,7 +605,7 @@ private theorem tinnikT3_eq_of_qGoodRelaxed {V E : Type*} {N : RootedNetwork V E
   · rintro q ⟨hq, hor⟩
     refine ⟨hq, fun s hs hd => ?_⟩
     obtain ⟨h₁, h₂, -⟩ := h q hq
-    obtain ⟨h₃, h₄⟩ := (h₂ s hs (Allman2023.inducedCutSplit_of_displays hN hd)).1 (hT s hd)
+    obtain ⟨h₃, h₄⟩ := (h₂ s hs (External.Allman2023.inducedCutSplit_of_displays hN hd)).1 (hT s hd)
     rcases hor with hor | hor
     · exact absurd h₁ (not_lt.2 hor)
     · rw [h₃] at hor
@@ -672,7 +671,7 @@ private theorem tendsto_qGoodRelaxed {V E : Type*} [Fintype V] [Fintype E] {N : 
       · refine tendsto_iidProb_of_imp hd (Eventually.of_forall fun m ω hω => ?_)
           (tendsto_good_t3 hN hθ hρ hα₀ hml hstrict)
         refine ⟨fun s hsq hcs => ?_, fun hnt => absurd ⟨s₀, hs₀, hc₀⟩ hnt⟩
-        have hss : s = s₀ := Allman2023.inducedCutSplit_unique hN hcs hc₀
+        have hss : s = s₀ := External.Allman2023.inducedCutSplit_unique hN hcs hc₀
           (Finset.mem_filter.mp hsq).2
         subst hss
         exact ⟨fun _ => hω, fun hn => absurd hstrict hn⟩
@@ -688,7 +687,7 @@ private theorem tendsto_qGoodRelaxed {V E : Type*} [Fintype V] [Fintype E] {N : 
         refine tendsto_iidProb_of_imp hd (Eventually.of_forall fun m ω hω => ?_)
           (hrej s₀.card_taxa (QuartetTests.not_isT3Null_of_anomalous hlt))
         refine ⟨fun s hsq hcs => ?_, fun hnt => absurd ⟨s₀, hs₀, hc₀⟩ hnt⟩
-        have hss : s = s₀ := Allman2023.inducedCutSplit_unique hN hcs hc₀
+        have hss : s = s₀ := External.Allman2023.inducedCutSplit_unique hN hcs hc₀
           (Finset.mem_filter.mp hsq).2
         subst hss
         exact ⟨fun hs' => absurd hs' hstrict, fun _ => hω⟩
@@ -720,7 +719,7 @@ theorem theorem4T3_of_tQuartet {V E : Type*} [Fintype V] [Fintype E] {N : Rooted
   have hd : IsDist (geneTreeDist N θ ρ) :=
     ⟨geneTreeDist_nonneg hN hθ hρ, sum_geneTreeDist hN hθ hρ⟩
   have hT : ∀ s, Displays (treeOfBlobs N) s → IsT1Strict (nmscCF N θ ρ) s := fun s hs =>
-    ⟨hNon s hs, (hdet.cut s (Allman2023.inducedCutSplit_of_displays hN hs)).2⟩
+    ⟨hNon s hs, (hdet.cut s (External.Allman2023.inducedCutSplit_of_displays hN hs)).2⟩
   have hall := tendsto_iidProb_forall hd (ι := {q : Finset X // q.card = 4})
     (fun q m ω => QGoodRelaxed N (nmscCF N θ ρ) ml β (α m) (quartetCount unroot ω) q.val)
     (fun q => tendsto_qGoodRelaxed hN hX hθ hρ hdet hα hα₀ hαlog hβ hml q.property)

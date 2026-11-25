@@ -1,6 +1,6 @@
 module
 
-public import Allman2023.MainResult.Algorithm
+public import Tinnik.External.Allman2023.Algorithm
 public import Tinnik.Consistency.NJ
 public import PhyloNetwork.Testing.Tails
 
@@ -61,7 +61,7 @@ theorem outline_cut_eq_tinnik (ml : (QuartetTree X → ℝ) → Finset X → Qua
   simp only [outline, tinnik, stepThree, hB, hT]
   refine Finset.filter_congr fun x _ => or_congr Iff.rfl ⟨fun h => ⟨h.le, h⟩, fun h => h.2⟩
 
-/-- **"Like NANUQ, it can be shown to provide a statistically consistent estimate of the network features it seeks to infer"** (`a:claim:outline-consistent`, Section 5). For generic numerical parameters on a binary network, there are levels `α_m → 0` of the cut test such that the outline, with any exact tree building method and any selection of maximum likelihood topologies, returns `T_rd(𝒩⁻)` on `m` independent gene trees with probability tending to one. From `Tinnik.theorem4`. -/
+/-- **"Like NANUQ, it can be shown to provide a statistically consistent estimate of the network features it seeks to infer"** (`allman2023:a:claim:outline-consistent`, Section 5 of Allman et al. 2023). For generic numerical parameters on a binary network, there are levels `α_m → 0` of the cut test such that the outline, with any exact tree building method and any selection of maximum likelihood topologies, returns `T_rd(𝒩⁻)` on `m` independent gene trees with probability tending to one. From `Tinnik.theorem4`. -/
 theorem outline_cut_consistent (hN : IsBinaryNetwork N) (hX : 4 ≤ Fintype.card X) :
     ∃ A : Set (MetricData E), N.IsGenericNull A ∧
       ∀ θ, N.IsMetric θ → θ ∉ A →
@@ -71,12 +71,13 @@ theorem outline_cut_consistent (hN : IsBinaryNetwork N) (hX : 4 ≤ Fintype.card
           ∀ hn : Nontrivial X,
             Tendsto (fun m => iidProb (geneTreeDist N θ 0) m fun ω =>
               outline (cutReject ml (α m)) ml M (quartetCount unroot ω) = (Trd hN hn).splits) atTop (𝓝 1) := by
-  obtain ⟨A, hA, h⟩ := theorem4 hN.isPhylogenetic hX hN.isBinary
+  obtain ⟨A, hA, h⟩ := theorem4 (External.Allman2023.isPhylogenetic_of_isBinaryNetwork hN) hX
+    (External.Allman2023.isBinary_of_isBinaryNetwork hN)
   refine ⟨A, hA, fun θ hθ hθA => ?_⟩
   obtain ⟨α, h1, h2, h3⟩ := h θ hθ hθA
   refine ⟨α, h1, h2, fun M hM ml hml hn => ?_⟩
   have key := h3 2 0 two_pos le_rfl two_pos M hM ml hml
-  rw [Bridges.splits_Trd hN hn]
+  rw [External.Allman2023.splits_Trd hN hn]
   refine key.congr fun m => ?_
   congr 1
   funext ω

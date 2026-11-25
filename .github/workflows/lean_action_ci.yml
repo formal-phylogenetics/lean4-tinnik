@@ -57,4 +57,5 @@ jobs:
         run: >-
           python3 scripts/check_md_tables.py README.md
           docs/Tinnik/REPORT.md docs/Tinnik/CREDITS.md Tinnik/Basic/README.md
-          Tinnik/External/README.md Tinnik/External/StudierKeppler1988/README.md
+          Tinnik/External/README.md Tinnik/External/Allman2023/README.md
+          Tinnik/External/StudierKeppler1988/README.md

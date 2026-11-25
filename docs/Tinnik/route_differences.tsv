@@ -1,24 +1,9 @@
 # Differences between the routes of the formal proofs and the paper's proofs, each with its reason.
 # Format: label<TAB>±other<TAB>reason. See Section 7 of the report, docs/Tinnik/REPORT.md. The routes of the paper are in docs/Tinnik/paper_routes.tsv.
-# A row with the label `*` records a result used without citation throughout. The rows of Allman et al. 2023 are in a section below.
+# A row with the label `*` records a result used without citation throughout.
 tinnik:theorem4	-tinnik:proposition5	Theorem 4's proof needs more than the fixed-parameter limit of Proposition 5: the estimated parameter and moving tail levels (the gap of E33). `cutTest_null` and `cutTest_alternative` prove what it needs, from the same limit theorems that prove Proposition 5, and the domination of the test distribution by Z².
 tinnik:theorem4	-tinnik:proposition6	Proposition 6 is the density of the test distribution, for computing p-values. The proof of Theorem 4 uses only the distribution, which `cutTail` defines directly.
-tinnik:theorem4	+a:thm:CFdetect	The proof restricts to "generic parameters ensuring that all induced 4-networks with 4-blobs have non-cut CFs", which is Theorem 1 of Allman et al., TINNiK's Theorem 1. `Allman2023.cfDetectable_generic` gets it from their Theorem 1 on each induced network.
-tinnik:theorem4	+a:claim:cf-induced	Through `Allman2023.cfDetectable_generic`, which passes `CF`s to the induced networks, as the proof of Allman et al.'s Corollary 1 does.
-tinnik:theorem4	+a:claim:generic-induced	Through `Allman2023.cfDetectable_generic`, which passes generic parameters to the induced networks, as the proof of Allman et al.'s Corollary 1 does.
-tinnik:theorem4	+a:claim:suppress-blobs	Through `Allman2023.cfDetectable_generic`, which passes B-quartets to the induced networks.
-tinnik:theorem4	+a:claim:three-taxa	Through `Allman2023.closure_sound`: TINNiK's B-quartet Inference is the closure under the rule of Allman et al., and the proof of the rule (`rule_core`) uses that three taxa determine a blob.
-tinnik:theorem4	+a:lem:inducedB	Through `Allman2023.closure_complete`: the closure reaches every B-quartet by the cycle of Allman et al.'s Lemma 3 (`lemma3_blob`), which uses their Lemma 2 (`determines_of_subnetwork`).
-# ==== Allman, Baños, Mitchell, Rhodes 2023 ====
-# The definitions, which statements use throughout, those of the later papers included when they reach results of this paper. The routes list a definition only where a statement of the proof needs it by name.
-*	+a:def::network	Every statement is on a network of Definition 1 (`IsBinaryNetwork`).
-*	+a:def::undirected	`T_rd(𝒩⁻)` is built on the semidirected network of Definition 5 (`semidirected`, `lsaPlus`), so every statement on it reaches them.
-*	+a:def:cf	Definition 14 (`cfTriple`, `quartetCF`), in the statements on `CF`s.
-*	+a:def:cutCF	Definition 15, in the statements on `CF`s.
-*	+a:def:determined	Definition 8 (`IsDeterminedBy`), in the statements on B-quartets, by Definition 12.
-*	+a:def:induced	Definition 6 (`induced`), in the statements on induced networks.
-*	+a:def:tob	Definition 10, through Definition 11.
-*	+a:def:trd	Definition 11 (`Trd`), in the statements on the reduced tree.
-*	+a:def:Bquartet	Definition 12 (`IsBlobQuartet`), in the statements on B-quartets.
-# A basic property of the objects, used without citation.
-*	+a:claim:trd-tree	The paper calls `T_rd(𝒩⁻)` a tree when it defines it, and uses that throughout. Here it is `Bridges.isTree_Trd`, which what is said about the topology of `T_rd` goes through.
+tinnik:theorem4	+allman2023:a:cor:largeCFdetect	The proof restricts to "generic parameters ensuring that all induced 4-networks with 4-blobs have non-cut CFs", which the paragraph before Theorem 4 takes from Theorem 1 (TINNiK's numbering), the CF-detectability of 4-blobs of Allman et al.: `External.Allman2023.cfDetectable_generic`, from lean4-allman2023's `Allman2023.cfDetectable_generic`, which passes it to the induced networks as the proof of their Corollary 1 does.
+tinnik:theorem4	+allman2023:a:claim:thm1b	The centroid step of the paragraph before Theorem 4, on a set of four taxa with a 4-blob, uses statement (b) of the proof of Theorem 1 of Allman et al.: `External.Allman2023.isGenericNull_not_isNonCut`, from lean4-allman2023's `Allman2023.isGenericNull_not_isNonCut`.
+tinnik:theorem4	+allman2023:a:thm:infrule	"The remaining deterministic steps of the B-quartet Inference algorithm then correctly infer all B-quartets" needs that the closure under the rule (TINNiK's Theorem 2) infers only B-quartets: `External.Allman2023.closure_sound`, from lean4-allman2023's `Allman2023.closure_sound`.
+tinnik:theorem4	+allman2023:a:thm:infer	The same sentence needs that the closure reaches every B-quartet (TINNiK's Theorem 3, combinatorial part): `External.Allman2023.closure_complete`, from lean4-allman2023's `Allman2023.closure_complete`.

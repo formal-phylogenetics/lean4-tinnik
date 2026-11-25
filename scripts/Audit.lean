@@ -31,6 +31,9 @@ import all Tinnik.Consistency.NJ
 import all Tinnik.Consistency.T3
 import all Tinnik.Consistency.Theorem4
 import all Tinnik.Defs
+import all Tinnik.External.Allman2023.Algorithm
+import all Tinnik.External.Allman2023.CFDetectable
+import all Tinnik.External.Allman2023.Rule
 import all Tinnik.External.StudierKeppler1988.Lemma
 import all Tinnik.Solution
 import all Phylogenetics.Coalescent.Absorption
@@ -327,8 +330,8 @@ It also writes the *route* of every numbered result to `.lake/route_deps.tsv`: t
 numbered results that its proof uses, found by following the proof through the library's helper
 lemmas and stopping at numbered results, together with the TeX label that the result's docstring
 names in backticks. `route_check.py` compares these routes with the results that the paper's proofs
-cite. The results of Allman et al. 2023 that carry labels are listed too, so that the routes reach
-them.
+cite. The results of Allman et al. 2023 that the paper cites, restated in `Tinnik/External/Allman2023/`,
+are listed too, with the labels of their rows.
 
 The library's modules are imported with `import all`, which makes the proofs of their theorems
 available: the module system does not export them otherwise. The traversal tests membership in a
@@ -344,19 +347,26 @@ open Lean Elab Command
 
 namespace Audit
 
-/-- The results from prior work, with a short label: the theorems proved in `External/`, in
-lean4-allman2023 and in the libraries that this repository requires. The traversal stops at them. -/
+/-- The results from prior work, with a short label: the theorems stated in `External/`, those of
+Allman et al. 2023 proved from lean4-allman2023, and those that the libraries this repository requires
+prove. The traversal stops at them. -/
 meta def externalResults : List (String × Name) :=
-  [("Allman et al. 2023, Theorem 1 (TINNiK's Theorem 1)", `Allman2023.theorem1),
-   ("Allman et al. 2023, Corollary 1", `Allman2023.corollary1),
-   ("Allman et al. 2023, Corollary 1, as CF-detectability", `Allman2023.cfDetectable_generic),
-   ("CF-detectability at given parameters", `Allman2023.CFDetectable),
-   ("Allman et al. 2023, Lemma 2", `Allman2023.lemma2),
-   ("Allman et al. 2023, Lemma 2, on a subgraph", `Allman2023.determines_of_subnetwork),
-   ("Allman et al. 2023, Theorem 2 (TINNiK's Theorem 2)", `Allman2023.theorem2),
-   ("Allman et al. 2023, Theorem 2, in the form for the closure", `Allman2023.rule_core),
-   ("Allman et al. 2023, Theorem 3, combinatorial part (TINNiK's Theorem 3)", `Allman2023.closure_complete),
-   ("Allman et al. 2023, Theorem 3, soundness", `Allman2023.closure_sound),
+  [("Allman et al. 2023, Corollary 1, as CF-detectability (TINNiK's Theorem 1)", `External.Allman2023.cfDetectable_generic),
+   ("Allman et al. 2023, statement (b) of the proof of Theorem 1", `External.Allman2023.isGenericNull_not_isNonCut),
+   ("Allman et al. 2023, the deleted networks of statement (a) of the proof of Theorem 1, normalized", `External.Allman2023.isNormalized_deletionMetric),
+   ("Allman et al. 2023, statement (a) of the proof of Theorem 1, a CF close to 1", `External.Allman2023.three_quarters_lt_nmscCF),
+   ("Allman et al. 2023, deleting more arcs keeps a split", `External.Allman2023.splitOffAt_mono),
+   ("Allman et al. 2023, Theorem 2, the rule applied repeatedly (TINNiK's Theorem 2)", `External.Allman2023.closure_sound),
+   ("Allman et al. 2023, Theorem 3, combinatorial part (TINNiK's Theorem 3)", `External.Allman2023.closure_complete),
+   ("Allman et al. 2023, displayed quartet trees are induced cut-edge splits", `External.Allman2023.inducedCutSplit_of_displays),
+   ("Allman et al. 2023, the quartet trees of the tree of blobs", `External.Allman2023.displays_treeOfBlobs_iff),
+   ("Allman et al. 2023, one induced cut-edge split per set of four taxa", `External.Allman2023.inducedCutSplit_unique),
+   ("Allman et al. 2023, induced cut-edge splits are splits off the empty deletion", `External.Allman2023.inducedCutSplit_iff_exists_splitOffAt),
+   ("Allman et al. 2023, the closure holds of sets of four taxa", `External.Allman2023.card_of_bInferred),
+   ("Allman et al. 2023, the quartet distance depends on sets of four taxa", `External.Allman2023.quartetDistance_congr),
+   ("Allman et al. 2023, Definition 1 networks are phylogenetic", `External.Allman2023.isPhylogenetic_of_isBinaryNetwork),
+   ("Allman et al. 2023, Definition 1 networks are binary", `External.Allman2023.isBinary_of_isBinaryNetwork),
+   ("Allman et al. 2023, the splits of T_rd", `External.Allman2023.splits_Trd),
    ("Mitchell et al. 2019, Theorem 3.1, for the cut model", `External.MitchellAllmanRhodes2019.cutModel_theorem31),
    ("Mitchell et al. 2019, Proposition 4.1, for the trinomial", `External.MitchellAllmanRhodes2019.proposition4_1),
    ("Mitchell et al. 2019, Proposition 4.2", `External.MitchellAllmanRhodes2019.proposition4_2),
@@ -389,157 +399,17 @@ meta def tinnikResults : List (String × Name) :=
    ("Allman et al. 2023: Like NANUQ, it can be shown to provide a statistically consistent estimate of the network features it seeks ...", `Tinnik.outline_cut_consistent),
    ("Studier, Keppler 1988, the Lemma fails at a polytomy", `External.StudierKeppler1988.not_lemmaAsPrinted)]
 
-meta def allmanResults1 : List (String × Name) :=
-  [("Definition 1", `Allman2023.IsBinaryNetwork),
-   ("Definition 2", `Allman2023.IsCutEdge),
-   ("Definition 3", `Allman2023.IsMetricParams),
-   ("Definition 4", `Allman2023.IsLSA),
-   ("Definition 5, the LSA network", `Allman2023.lsaPlus),
-   ("Definition 5, the semidirected network", `Allman2023.semidirected),
-   ("Definition 6", `Allman2023.induced),
-   ("Definition 7, on a rooted network", `Allman2023.blobDegree),
-   ("Definition 7, on a graph", `Allman2023.cutDegree),
-   ("Definition 8", `Allman2023.IsDeterminedBy),
-   ("Definition 9", `Allman2023.IsChainOfBlobs),
-   ("Definition 10, on a semidirected network", `Allman2023.unrootedTreeOfBlobs),
-   ("Definition 10, on a rooted network", `Allman2023.treeOfBlobsRooted),
-   ("Definition 11, unrooted", `Allman2023.Trd),
-   ("Definition 11, rooted", `Allman2023.reducedRootedTree),
-   ("Definition 12", `Allman2023.IsBlobQuartet),
-   ("Definition 13, associated quartet", `Allman2023.IsAssociatedQuartet),
-   ("Definition 13", `Allman2023.IsTreeQuartet),
-   ("Definition 14, the triple", `Allman2023.cfTriple),
-   ("Definition 14, one quartet", `Allman2023.quartetCF),
-   ("Definition 15, cut", `Allman2023.IsCutCF),
-   ("Definition 15, non-cut, on quartet trees", `Allman2023.IsNonCut),
-   ("Definition 15, non-cut", `Allman2023.IsNonCutCF),
-   ("Definition 15, strictly cut, on quartet trees", `Allman2023.IsStrictlyCutAt),
-   ("Definition 15, strictly cut at the first entry", `Allman2023.IsStrictlyCutAtFirst),
-   ("Definition 15, strictly cut", `Allman2023.IsStrictlyCutCF),
-   ("the network of Proposition 1", `Allman2023.NetworkNk.networkNk),
-   ("three taxa determine one blob", `Allman2023.BlobStructure.existsUnique_isDeterminedBy_three),
-   ("three taxa determine a blob", `Allman2023.Bridges.exists_isDeterminedBy_three),
-   ("three taxa determine a blob, on the subnetwork of Theorem 1", `Allman2023.exists_determines_arcsAbove),
-   ("three taxa determine a blob, on a subgraph", `Allman2023.exists_determines_three),
-   ("a B-quartet displays the unresolved quartet", `Allman2023.isBlobQuartet_iff_displaysUnresolved),
-   ("a T-quartet displays a resolved quartet", `Allman2023.exists_displays_of_isTreeQuartet),
-   ("a displayed quartet is the induced topology", `Allman2023.inducedHasQuartetTopology_of_displays),
-   ("a T-quartet stays a T-quartet on the induced network", `Allman2023.isTreeQuartet_induced),
-   ("CFs pass to the induced network", `Allman2023.nmscCF_induced),
-   ("generic parameters pass to the induced network", `Allman2023.isGenericNull_inducedParams),
-   ("valid parameters pass to the induced network", `Allman2023.isMetric_inducedParams),
-   ("blobs pass to blobs under suppression, one network", `Allman2023.BlobsPass.isBlobQuartetOnInduced_iff),
-   ("blobs pass to blobs under suppression", `Allman2023.Bridges.isBlobQuartetOnInduced_iff),
-   ("the rule's hypothesis (a) on an induced network", `Allman2023.InducedTreeSeparates.image),
-   ("what is inferred on an induced network", `Allman2023.TopologyInferredA.image),
-   ("an induced network of an induced network, resolved", `Allman2023.inducedHasQuartetTopology_induced),
-   ("an induced network of an induced network, unresolved", `Allman2023.inducedHasStarTopology_induced),
-   ("the rooted forms in the proof of Theorem 1", `Allman2023.rootedForms),
-   ("displayed quartets determine the tree", `Allman2023.treeFromQuartets_displays),
-   ("Lemma 1", `Allman2023.lemma1),
-   ("Theorem 1, (a), for all parameters", `Allman2023.theorem1_cut),
-   ("Theorem 1, statement (a)", `Allman2023.theorem1_a),
-   ("Theorem 1, (b), the 2-blob step", `Allman2023.exists_isContractible_of_cutDegree_two)]
+/-- The results of Allman et al. 2023, restated in `Tinnik/External/Allman2023/`, that carry the
+labels of their rows of the routes file. -/
+meta def allmanResults : List (String × Name) :=
+  [("Allman et al. 2023, Corollary 1, as CF-detectability", `External.Allman2023.cfDetectable_generic),
+   ("Allman et al. 2023, statement (b) of the proof of Theorem 1", `External.Allman2023.isGenericNull_not_isNonCut),
+   ("Allman et al. 2023, Theorem 2, the rule applied repeatedly", `External.Allman2023.closure_sound),
+   ("Allman et al. 2023, Theorem 3, combinatorial part", `External.Allman2023.closure_complete)]
 
-/-- The results of Allman et al. 2023 that carry the labels of the routes file (part 2). -/
-meta def allmanResults2 : List (String × Name) :=
-  [("the mixture, on the deleted networks", `Allman2023.InPassing.cf_mixture),
-   ("Theorem 1, (b), the mixture", `Allman2023.nmscCF_withPair_mixture),
-   ("Theorem 1, (b), the contradiction", `Allman2023.IsLowPair.exists_splitOffAt),
-   ("Theorem 1, statement (b)", `Allman2023.theorem1_b),
-   ("Theorem 1", `Allman2023.theorem1),
-   ("Corollary 1", `Allman2023.corollary1),
-   ("proof of Proposition 1, the probability of a level", `Allman2023.NetworkNk.stageMass_divLevel),
-   ("proof of Proposition 1, the probability alpha", `Allman2023.NetworkNk.stageMass_divAt),
-   ("proof of Proposition 1, the mixture", `Allman2023.NetworkNk.nmscCF_eq_mixture),
-   ("proof of Proposition 1, CF1 from the species trees", `Allman2023.NetworkNk.mul_cfOne_eq_species),
-   ("Proposition 1", `Allman2023.proposition1),
-   ("Proposition 1, the converse", `Allman2023.proposition1_converse),
-   ("Lemma 2, on a subgraph", `Allman2023.determines_of_subnetwork),
-   ("Lemma 2", `Allman2023.lemma2),
-   ("Corollary 2", `Allman2023.corollary2),
-   ("Theorem 2", `Allman2023.theorem2),
-   ("Lemma 3", `Allman2023.lemma3),
-   ("proof of Theorem 3, the first step", `Allman2023.exists_representatives_induced),
-   ("only part (a) of Theorem 2 is needed, the induction", `Allman2023.theorem3_core_partA),
-   ("only part (a) of Theorem 2 is needed", `Allman2023.theorem3_partA),
-   ("proof of Theorem 3, the induction", `Allman2023.theorem3_core),
-   ("Theorem 3", `Allman2023.theorem3),
-   ("proof of Theorem 4, the displayed quartets", `Allman2023.displayedFromCF_eq),
-   ("the splits of the tree determine it", `Allman2023.isIso_Trd_of_splits_eq),
-   ("Theorem 4", `Allman2023.theorem4),
-   ("Theorem 4, for two networks, as labelled trees", `Allman2023.theorem4_iso),
-   ("Theorem 4, with the function", `Allman2023.theorem4_treeFromCF),
-   ("Theorem 4, for two networks", `Allman2023.theorem4_two_networks),
-   ("hybrid edges are in blobs", `Allman2023.InPassing.not_isBridge_of_isHybridEdge),
-   ("a blob determined by k taxa has degree at least k", `Allman2023.InPassing.card_le_blobDegree),
-   ("a blob determined by k taxa has degree at least k, on a graph", `Allman2023.InPassing.card_le_cutDegree),
-   ("condition (1) after Definition 12", `Allman2023.InPassing.isBlobQuartet_iff_deletion),
-   ("the unrooted reduced tree from the rooted one", `Allman2023.InPassing.isIso_trdFromRooted),
-   ("the reduced tree of blobs is a tree", `Allman2023.Bridges.isTree_Trd),
-   ("tree-like induced networks and their displayed trees", `Allman2023.InPassing.isTreelike_iff_forall_displays),
-   ("the distance between blobs is not identifiable", `Allman2023.InPassing.blobDistance_not_identifiable),
-   ("any number of 2-blobs, resolved", `Allman2023.InPassing.exists_network_resolved),
-   ("any number of 2-blobs, unresolved", `Allman2023.InPassing.exists_network_star),
-   ("for generic parameters, cut iff strictly cut", `Allman2023.isCutCF_iff_isStrictlyCutCF),
-   ("blobs below the LSA are determined by three taxa", `Allman2023.BlobStructure.exists_isDeterminedBy_of_isBelowLSA),
-   ("blobs above the LSA are not determined", `Allman2023.BlobStructure.not_isDeterminedBy_of_isAboveLSA),
-   ("a blob at the LSA is determined by three taxa", `Allman2023.BlobStructure.exists_isDeterminedBy_lsaNode),
-   ("the shape of a chain of blobs", `Allman2023.BlobStructure.IsChainOfBlobs.deg_eq_two),
-   ("blobs above the LSA are 2-blobs", `Allman2023.BlobStructure.blobDegree_eq_two_of_isAboveLSA),
-   ("the chain of blobs between root and LSA", `Allman2023.BlobStructure.exists_chain_root_lsaNode),
-   ("the degree of the blob of the LSA", `Allman2023.BlobStructure.blobDegree_lsaPlus),
-   ("an m-blob at the LSA gives an (m-1)-multifurcation", `Allman2023.BlobStructure.existsUnique_multifurcation),
-   ("a 3-blob at the LSA is suppressed", `Allman2023.BlobStructure.not_liesIn_of_three),
-   ("a CF is in the simplex", `Allman2023.cfTriple_mem_simplex),
-   ("CFs off the segments come from unresolved trees", `Allman2023.hasStarTopology_of_isNonCutCF)]
-
-/-- The results of Allman et al. 2023 that carry the labels of the routes file (part 3). -/
-meta def allmanResults3 : List (String × Name) :=
-  [("points off the segments arise from 4-cycles (Banos 2019)", `Allman2023.FourCycle.exists_cfTriple_eq),
-   ("a 4-blob can give a CF on the segments", `Allman2023.FourCycle.exists_isCutCF),
-   ("a pendant edge whose length is not identifiable", `Allman2023.FourCycle.pendant_not_identifiable),
-   ("lengths of edges between trivial blobs, on the rooted network", `Allman2023.TrivialEdges.edge_length_eq),
-   ("lengths of edges between trivial blobs, at the root", `Allman2023.TrivialEdges.root_length_eq),
-   ("lengths of edges between trivial blobs, internal edges", `Allman2023.TrivialEdges.semidirected_length_eq),
-   ("Figure 3", `Allman2023.Figures.fig3_cf),
-   ("Figure 9, left, the CFs", `Allman2023.Figures.fig9L_cf),
-   ("Figure 9, left, one rule", `Allman2023.Figures.fig9L_single_rule),
-   ("Figure 9, right, the CFs", `Allman2023.Figures.fig9R_cf),
-   ("Figure 9, right, three rules", `Allman2023.Figures.fig9R_three_rules),
-   ("Lemma 2 needs a connected subnetwork", `Allman2023.lemma2_needs_connected),
-   ("The consistency of the outline, for a test that is right on each set of four taxa with probability tending to ...", `Allman2023.Algorithm.outline_consistent),
-   ("For edges between trivial blobs ... heuristics such as those used by ASTRAL ... provide a fast estimate of ...", `Allman2023.Algorithm.astralLength_semidirected),
-   ("If 𝒩⁺ is a resolved tree, then Allman et al. (2011) showed CF_{ab/cd} may take on any value in the interval ...", `Allman2023.InPassing.cf_tree_range),
-   ("This network has 6 non-trivial blobs (a 5-blob, two 3-blobs, and three 2-blobs), and a single trivial 3-blob", `Allman2023.Figures.fig1_blobs),
-   ("The child edges of v are both tree edges and non-cut, while the parent edge of v is tree and cut", `Allman2023.Figures.fig1_edges_at_v),
-   ("The induced network on a B-quartet ... can even be a tree", `Allman2023.Figures.fig3_induced_tree),
-   ("However, {a, b, c, f} is a B-quartet on both the full and the induced networks", `Allman2023.Figures.fig3_abcf),
-   ("The lowest stable ancestor (LSA) of the network is v", `Allman2023.Figures.fig1_lsa),
-   ("Nodes ... of degree 2 or 3 may correspond to trivial or non-trivial blobs in the network", `Allman2023.Figures.fig1_degree_examples),
-   ("A single 2-blob in a non-binary network, formed from two 2-cycles sharing a single node", `Allman2023.Figures.fig2R_blob),
-   ("Leaves are the only 1-blobs", `Allman2023.BlobStructure.blobDegree_eq_one_iff_of_isTreeNetwork),
-   ("The root and internal nodes are 3-blobs", `Allman2023.BlobStructure.blobDegree_eq_three_of_isTreeNetwork),
-   ("Nodes of degree 4 or more in the tree of blobs indicate non-trivial blobs for a binary network", `Allman2023.BlobStructure.not_isTrivialBlob_of_four_le_cutDegree),
-   ("On a non-binary tree, polytomous nodes are k-blobs with k ≥ 4", `Allman2023.BlobStructure.four_le_blobDegree_of_isTreeNetwork),
-   ("(If the network is level-1, this is a chain of 2-cycles, as discussed in Banos 2019)", `Allman2023.BlobStructure.ncard_blobNodes_of_isAboveLSA),
-   ("If the root of a binary network is a trivial blob, then it is a degree-2 node but forms a degree-3 blob", `Allman2023.BlobStructure.root_of_isTrivialBlob),
-   ("As is well known, on a tree any 3 taxa determine a unique node", `Allman2023.BlobStructure.existsUnique_node_of_isTreeNetwork),
-   ("If the number of taxa was not decreased, then 𝒩⁺ has a relatively simple structure: Its LSA network 𝒩⊕ ...", `Allman2023.BlobStructure.structure_of_separated),
-   ("If the species network is a tree then two of the three entries of CF_abcd must be equal, with the third no ...", `Allman2023.BlobStructure.third_no_smaller_of_isTreeNetwork),
-   ("If two cycles share only a node as in Fig. 2R ... Our restriction to binary networks rules out this ...", `Allman2023.BlobStructure.exists_mem_inter_of_two_incident),
-   ("Non-tree phylogenetic networks may have k-blobs that are not nodes for any k > 1", `Allman2023.CycleFamily.exists_kBlob),
-   ("Blobs may ... reduce to tree-like relationships. Indeed, this happens even in the level-1 case with a single ...", `Allman2023.CycleFamily.cycleNet_b_to_t),
-   ("A ... 4-blob", `Allman2023.Figures.fig2C_blob),
-   ("A planar 5-blob", `Allman2023.Figures.fig2L_planar),
-   ("A non-planar 4-blob", `Allman2023.Figures.fig2C_not_planar),
-   ("A ... 5-blob", `Allman2023.Figures.fig2L_blob),
-   ("If 𝒩⁺ is level-1, then Baños (2019) showed CF_{ab/cd} may take on any value in (1/6, 1)", `Allman2023.NetworkNk.banos_range)]
-
-/-- The numbered results of the paper and of Allman et al. 2023 that carry labels: one list is split
-in parts, since one literal of this length exceeds the limit on elaboration. -/
+/-- The numbered results of the paper, and the results of Allman et al. 2023 that it cites. -/
 meta def paperResults : List (String × Name) :=
-  tinnikResults ++ allmanResults1 ++ allmanResults2 ++ allmanResults3
+  tinnikResults ++ allmanResults
 
 /-- The theorem that Palomar's comparator checks (`theorem_names` of
 `palomar/Tinnik/comparator.json`), as the Solution restates it. -/

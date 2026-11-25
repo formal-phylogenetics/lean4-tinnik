@@ -13,7 +13,7 @@ This paper is one of the four of the hub [lean4-tob](https://github.com/vltanh/l
 | Part of the paper | Status |
 | --- | --- |
 | Background: the definitions, the cut model (Definition 7) and the tests | stated on the definitions of the libraries; the cut model of Appendix C on the closed simplex (E31) |
-| Background: Theorems 1, 2 and 3, from Allman et al. 2023 | proved in lean4-allman2023, in the forms TINNiK uses |
+| Background: Theorems 1, 2 and 3, from Allman et al. 2023 | stated in [`Tinnik/External/Allman2023/`](Tinnik/External/Allman2023), in the forms TINNiK uses, and proved from lean4-allman2023 |
 | Algorithms: the B-quartet Inference Algorithm and TINNiK, with their running times | proved: the closure is what the printed algorithm computes, and the running times are counts of operations |
 | Statistical consistency: Theorem 4 | proved, with the paper's levels, and with one sequence of levels for all networks |
 | What the paper says in passing: the T3 option, missing taxa, neighbor joining, the index in lex order | proved; missing taxa with each set of four taxa on more and more gene trees (E75) |
@@ -35,9 +35,9 @@ The statement of record is the theorem of the Challenge, [`palomar/Tinnik/Challe
 
 | Paper | Lean | Statement |
 | --- | --- | --- |
-| Theorem 4, the library's form | [`Tinnik.theorem4`](Tinnik/Consistency/Theorem4.lean#L619) | Theorem 4, without the hypotheses that its proof does not use |
-| Theorem 4, one sequence of levels | [`Tinnik.theorem4_explicit`](Tinnik/Consistency/Theorem4.lean#L647) | one sequence `α_m`, independent of the network and the parameters, serves |
-| The T3 option | [`Tinnik.theorem4T3`](Tinnik/Consistency/T3.lean#L465) | Theorem 4 with the T3 test, for networks with no anomalous quartets |
+| Theorem 4, the library's form | [`Tinnik.theorem4`](Tinnik/Consistency/Theorem4.lean#L617) | Theorem 4, without the hypotheses that its proof does not use |
+| Theorem 4, one sequence of levels | [`Tinnik.theorem4_explicit`](Tinnik/Consistency/Theorem4.lean#L645) | one sequence `α_m`, independent of the network and the parameters, serves |
+| The T3 option | [`Tinnik.theorem4T3`](Tinnik/Consistency/T3.lean#L464) | Theorem 4 with the T3 test, for networks with no anomalous quartets |
 | Neighbor joining in Step 4 | [`Tinnik.theorem4_nj`](Tinnik/Consistency/NJ.lean#L36) | Theorem 4 with neighbor joining, for any way of breaking ties |
 | Missing taxa, the sentence before Theorem 4 | [`Tinnik.theorem4_missing`](Tinnik/Consistency/MissingTaxa.lean#L473) | Theorem 4 for gene trees on subsets of the taxa, when each set of four taxa is on more and more of them (E75) |
 | The running times | [`Tinnik.tinnikOperations_le`](Tinnik/Algorithms/Counts.lean#L835) | the steps of TINNiK take `O((m + N) N⁴)` operations, with the count `4 (N - 4)` of the sets sharing three taxa with one (E29) |
@@ -51,8 +51,8 @@ The statement of record is the theorem of the Challenge, [`palomar/Tinnik/Challe
 
 | Source | Lean | Statement |
 | --- | --- | --- |
-| Allman et al. 2023, Theorem 1 and Corollary 1 (TINNiK's Theorem 1) | [`Allman2023.cfDetectable_generic`](https://github.com/vltanh/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/FourTaxa/CFDetectable.lean#L24) | `CF`-detectability of 4-blobs on every induced network, for generic parameters; proved in lean4-allman2023 |
-| Allman et al. 2023, Theorems 2 and 3 (TINNiK's Theorems 2 and 3) | [`Allman2023.rule_core`](https://github.com/vltanh/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/LargeNetworks/Rule.lean#L596), [`Allman2023.closure_sound`](https://github.com/vltanh/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/LargeNetworks/Rule.lean#L714), [`Allman2023.closure_complete`](https://github.com/vltanh/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/LargeNetworks/Rule.lean#L706) | the B-quartet inference rule, and its closure is the set of B-quartets; proved in lean4-allman2023 |
+| Allman et al. 2023, Theorem 1 and Corollary 1 (TINNiK's Theorem 1) | [`External.Allman2023.cfDetectable_generic`](Tinnik/External/Allman2023/CFDetectable.lean#L34) | `CF`-detectability of 4-blobs on every induced network, for generic parameters; proved from lean4-allman2023's [`Allman2023.cfDetectable_generic`](https://github.com/vltanh/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/FourTaxa/CFDetectable.lean#L24) |
+| Allman et al. 2023, Theorems 2 and 3 (TINNiK's Theorems 2 and 3) | [`External.Allman2023.closure_sound`](Tinnik/External/Allman2023/Rule.lean#L35), [`External.Allman2023.closure_complete`](Tinnik/External/Allman2023/Rule.lean#L43) | the closure under the B-quartet inference rule is the set of B-quartets; proved from lean4-allman2023's [`Allman2023.closure_sound`](https://github.com/vltanh/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/LargeNetworks/Rule.lean#L714) and [`Allman2023.closure_complete`](https://github.com/vltanh/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/LargeNetworks/Rule.lean#L706) |
 | Mitchell et al. 2019, Theorem 3.1, for the trinomial cut model | [`External.MitchellAllmanRhodes2019.cutModel_theorem31`](https://github.com/vltanh/lean4-phylo-network/blob/4ed2bb0f7085acbf1326f43e2a5c582ba4566125/PhyloNetwork/External/MitchellAllmanRhodes2019/CutModel.lean#L181) | the limit law of the likelihood ratio at a cut model, in Proposition 5; proved in lean4-phylo-network |
 | Rhodes 2020, Theorem 2 | [`External.Rhodes2020.theorem2`](https://github.com/vltanh/lean4-phylo-network/blob/4ed2bb0f7085acbf1326f43e2a5c582ba4566125/PhyloNetwork/External/Rhodes2020/Theorem2.lean#L777) | the quartet distance is a tree metric with the same topology; proved in lean4-phylo-network |
 | Saitou, Nei 1987; Studier, Keppler 1988 | [`Phylogenetics.NJ.isExactBuilder_nj`](https://github.com/vltanh/lean4-phylogenetics/blob/3fcabfd7d191990dda268b0b3968d945b65eb59a/Phylogenetics/Tree/NeighborJoining.lean#L1964) | neighbor joining is an exact tree builder; proved in lean4-phylogenetics |
@@ -87,7 +87,7 @@ The gaps are repaired, and none changes a statement. [Section 3 of the report](d
 - [lean4-phylogenetics](https://github.com/vltanh/lean4-phylogenetics), the library of the collection, pinned by commit in [`lakefile.toml`](lakefile.toml): networks, trees and quartets, the network multispecies coalescent and generic parameters, neighbor joining and Buneman's four-point theorem.
 - [lean4-phylo-network](https://github.com/vltanh/lean4-phylo-network), the library of the hub of network estimation, pinned by commit: the hypothesis tests on quartet counts, their limit laws, independent samples, and the sources Mitchell et al. 2019 and Rhodes 2020.
 - [lean4-tob](https://github.com/vltanh/lean4-tob), the library of this paper's hub, pinned by commit: the TINNiK algorithm and the closure under the B-quartet inference rule, and the counts of tree edges.
-- [lean4-allman2023](https://github.com/vltanh/lean4-allman2023), Allman et al. 2023, pinned by commit: TINNiK's Theorems 1, 2 and 3.
+- [lean4-allman2023](https://github.com/vltanh/lean4-allman2023), Allman et al. 2023, pinned by commit: TINNiK's Theorems 1, 2 and 3, and the steps of their proofs that the proofs here use, which [`Tinnik/External/Allman2023/`](Tinnik/External/Allman2023) states and proves from its theorems.
 
 ## Palomar
 
@@ -116,7 +116,7 @@ python3 scripts/linkify_docs.py                                       # the docu
 | Folder | Content |
 | --- | --- |
 | [`Tinnik/Basic/`](Tinnik/Basic) | General mathematics, in Mathlib's namespaces; [its README](Tinnik/Basic/README.md) says where each part could go |
-| [`Tinnik/External/`](Tinnik/External) | The cited results, one directory per source, in the namespaces `External.<Source>`; [its README](Tinnik/External/README.md) lists them, with those proved in the libraries |
+| [`Tinnik/External/`](Tinnik/External) | The cited results, one directory per source, in the namespaces `External.<Source>`: Studier, Keppler 1988, and Allman et al. 2023, proved from lean4-allman2023; [its README](Tinnik/External/README.md) lists them, with those proved in the libraries |
 | [`Tinnik/Defs.lean`](Tinnik/Defs.lean), [`Tinnik/Bridge/`](Tinnik/Bridge) | The definitions of the Challenge, and the proof that they are the library's |
 | [`Tinnik/Algorithms/`](Tinnik/Algorithms) | The algorithms' running times ([`Counts`](Tinnik/AppendixC/Definitions.lean#L35)) and the index of a set of four taxa (`LexIndex`) |
 | [`Tinnik/Consistency/`](Tinnik/Consistency) | Theorem 4 (`Theorem4`), with the T3 option (`T3`), missing taxa (`MissingTaxa`), neighbor joining (`NJ`), and the outline of Allman et al. 2023 (`AllmanOutline`) |
