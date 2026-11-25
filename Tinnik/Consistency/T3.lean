@@ -10,7 +10,7 @@ public import Phylogenetics.NMSC.Basic
 public import Phylogenetics.Network.CutHierarchy
 public import PhyloNetwork.Testing.Tails
 public import Phylogenetics.Tree.Metric
-public import TINNiK.Basic
+public import Tinnik.Consistency.Theorem4
 
 /-!
 # TINNiK with the T3 test
@@ -40,10 +40,11 @@ model (`T3Detectable`).
 open Phylogenetics Phylogenetics.RootedNetwork Finset Filter Topology
 open scoped Classical
 
-namespace Phylogenetics.QuartetTests
+namespace Tinnik
 
-variable {X : Type*} [Fintype X] [DecidableEq X]
+variable {V E X : Type*} [Fintype X] [DecidableEq X]
 
+open QuartetTests in
 /-- A non-cut concordance factor (Definition 15 of Allman et al. 2023) is off model T3. -/
 theorem not_isT3Null_of_isNonCut {p : QuartetTree X → ℝ} {q : Finset X}
     (h : Allman2023.IsNonCut p q) : ¬ IsT3Null p q := by
@@ -53,12 +54,6 @@ theorem not_isT3Null_of_isNonCut {p : QuartetTree X → ℝ} {q : Finset X}
   have hsq := mem_treesOn.1 hs
   exact h r₁ (mem_treesOn.2 (ht₁.trans hsq)) r₂ (mem_treesOn.2 (ht₂.trans hsq)) hne
     (heq r₁ (by rw [ha]; simp) r₂ (by rw [ha]; simp))
-
-end Phylogenetics.QuartetTests
-
-namespace TINNiK
-
-variable {V E X : Type*} [Fintype X] [DecidableEq X]
 
 /-! ### The algorithm with the T3 option -/
 
@@ -112,7 +107,7 @@ structure T3Detectable {V E : Type*} (N : RootedNetwork V E X) (p : QuartetTree 
 theorem T3Detectable.of_cfDetectable {V E : Type*} {N : RootedNetwork V E X} {p : QuartetTree X → ℝ}
     (hdet : Allman2023.CFDetectable N p) (hno : NoAnomalousQuartets N p) : T3Detectable N p :=
   ⟨fun s hs => ⟨hno s hs, (hdet.cut s hs).2⟩, fun q hq hnt =>
-    QuartetTests.not_isT3Null_of_isNonCut (hdet.blob q hq hnt)⟩
+    not_isT3Null_of_isNonCut (hdet.blob q hq hnt)⟩
 
 /-- What the T3 test needs excludes the centroid, which is on model T3. -/
 theorem noCentroidCF_of_t3Detectable {V E : Type*} {N : RootedNetwork V E X} {p : QuartetTree X → ℝ}
@@ -140,7 +135,7 @@ theorem noCentroidCF_of_t3Detectable {V E : Type*} {N : RootedNetwork V E X} {p 
 /-- Steps 3 to 5 from their outcome: when the closure is the set of B-quartets and the quartet trees of the other sets are those
 of the tree of blobs, the algorithm returns the tree of blobs. The quartet distance is then the tree metric of the quartet
 metrization of the tree of blobs (Rhodes 2020, Theorem 2); an exact tree builder returns it; and the internal branches of length
-at least `2` survive the cutoff `δ < 2`. This is the last part of the private `tinnik_eq_of_tests` of `src/TINNiK/Basic.lean`. -/
+at least `2` survive the cutoff `δ < 2`. This is the last part of the private `tinnik_eq_of_tests` of `src/Tinnik/Consistency/Theorem4.lean`. -/
 theorem tinnikOf_eq_of_closure {V E : Type*} {N : RootedNetwork V E X} (hN : N.IsPhylogenetic)
     (hX : 4 ≤ Fintype.card X) {δ : ℝ} (hδ₂ : δ < 2) {M : TreeBuilder X} (hM : IsExactBuilder M)
     {B₀ : Set (Finset X)} {τ : Set (QuartetTree X)}
@@ -698,7 +693,7 @@ private theorem tendsto_qGoodRelaxed {V E : Type*} [Fintype V] [Fintype E] {N : 
         subst hss
         exact ⟨fun hs' => absurd hs' hstrict, fun _ => hω⟩
     · refine tendsto_iidProb_of_imp hd (Eventually.of_forall fun m ω hω => ?_)
-        (hrej hq (QuartetTests.not_isT3Null_of_isNonCut (hdet.blob q hq htl)))
+        (hrej hq (not_isT3Null_of_isNonCut (hdet.blob q hq htl)))
       exact ⟨fun s hsq hcs => absurd ⟨s, hsq, hcs⟩ htl, fun _ => hω⟩
   exact tendsto_iidProb_and hd
     (tendsto_star hd hsone hq (noCentroidCF_of_cfDetectable hdet q hq) hβ) hcases
@@ -731,5 +726,25 @@ theorem theorem4T3_of_tQuartet {V E : Type*} [Fintype V] [Fintype E] {N : Rooted
     (fun q => tendsto_qGoodRelaxed hN hX hθ hρ hdet hα hα₀ hαlog hβ hml q.property)
   refine tendsto_iidProb_of_imp hd (Eventually.of_forall fun m ω hω => ?_) hall
   exact tinnikT3_eq_of_qGoodRelaxed hN hX hT hδ₂ hM fun q hq => hω ⟨q, hq⟩
+
+end Tinnik
+
+/-! ### The names in the namespace `TINNiK`, which the repositories that require this one use -/
+
+@[deprecated (since := "2026-11-25")] alias TINNiK.exists_levels_t3 := Tinnik.exists_levels_t3
+@[deprecated (since := "2026-11-25")] alias TINNiK.tendsto_chiSqTwoTail_mul := Tinnik.tendsto_chiSqTwoTail_mul
+@[deprecated (since := "2026-11-25")] alias TINNiK.tendsto_mem_testedBT3_of_anomalous := Tinnik.tendsto_mem_testedBT3_of_anomalous
+@[deprecated (since := "2026-11-25")] alias TINNiK.tests_correct_t3 := Tinnik.tests_correct_t3
+@[deprecated (since := "2026-11-25")] alias TINNiK.tests_correct_t3_of_t3Detectable := Tinnik.tests_correct_t3_of_t3Detectable
+@[deprecated (since := "2026-11-25")] alias TINNiK.theorem4T3 := Tinnik.theorem4T3
+@[deprecated (since := "2026-11-25")] alias TINNiK.theorem4T3_explicit := Tinnik.theorem4T3_explicit
+@[deprecated (since := "2026-11-25")] alias TINNiK.theorem4T3_of_tQuartet := Tinnik.theorem4T3_of_tQuartet
+@[deprecated (since := "2026-11-25")] alias TINNiK.tinnik_eq_tinnikOf := Tinnik.tinnik_eq_tinnikOf
+@[deprecated (since := "2026-11-25")] alias Phylogenetics.QuartetTests.not_isT3Null_of_isNonCut :=
+  Tinnik.not_isT3Null_of_isNonCut
+
+namespace TINNiK
+
+export Tinnik (IsT3MLSelection testedBT3 testedTT3 tinnikT3 T3Detectable)
 
 end TINNiK

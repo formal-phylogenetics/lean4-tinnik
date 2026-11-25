@@ -13,7 +13,7 @@ public import Phylogenetics.Network.CutHierarchy
 public import Phylogenetics.Network.DeletedArcs
 public import PhyloNetwork.Testing.Limits
 public import Phylogenetics.Tree.Metric
-public import TINNiK.Statistics.AppendixC
+public import Tinnik.AppendixC.LikelihoodRatio
 
 /-!
 # TINNiK: consistency of the algorithm
@@ -30,7 +30,7 @@ The count of Step 3(a)(i) (E29 of the report), and Theorem 4. Theorem 4 takes th
 open Phylogenetics Phylogenetics.RootedNetwork Finset Filter Topology
 open scoped Classical
 
-namespace TINNiK
+namespace Tinnik
 
 variable {V E X : Type*} [Fintype X] [DecidableEq X]
 
@@ -241,17 +241,6 @@ private theorem tests_of_qGood {V E : Type*} {N : RootedNetwork V E X} {ml : (Qu
   · intro hc
     exact ⟨fun hn => hn.2 ⟨s, hsmem, hc⟩,
       ((h s.taxa (QuartetTree.card_taxa s)).2.1 s hsmem hc).1.symm⟩
-
-/-- If two events have probability tending to one, so does their intersection. -/
-theorem tendsto_iidProb_and {Γ : Type*} [Fintype Γ] {dist : Γ → ℝ} (hd : IsDist dist)
-    {P Q : (n : ℕ) → (Fin n → Γ) → Prop}
-    (hP : Tendsto (fun n => iidProb dist n (P n)) atTop (𝓝 1))
-    (hQ : Tendsto (fun n => iidProb dist n (Q n)) atTop (𝓝 1)) :
-    Tendsto (fun n => iidProb dist n fun ω => P n ω ∧ Q n ω) atTop (𝓝 1) := by
-  have h := tendsto_iidProb_forall hd (ι := Bool) (fun b n ω => if b = true then P n ω else Q n ω)
-    (by intro b; cases b <;> simpa)
-  refine tendsto_iidProb_of_imp hd (Eventually.of_forall fun n ω hω => ?_) h
-  exact ⟨by simpa using hω true, by simpa using hω false⟩
 
 /-- Gene trees under the NMSC are binary, so they display one quartet tree on each set of four taxa. -/
 theorem displaysOne_nmsc {V E : Type*} [Fintype V] [Fintype E] [Nonempty X]
@@ -668,5 +657,25 @@ theorem theorem4_explicit [Fintype V] [Fintype E] {N : RootedNetwork V E X}
     QuartetTests.tendsto_chiSqOneTail_log
     (rejects_of_log hN hθ ⟨le_rfl, zero_le_one⟩ hdet (fun _ => QuartetTests.chiSqOneTail_pos _)
       QuartetTests.tendsto_log_chiSqOneTail_log) hβ hδ₂ hM hml
+
+end Tinnik
+
+/-! ### The names in the namespace `TINNiK`, which the repositories that require this one use -/
+
+@[deprecated (since := "2026-11-25")] alias TINNiK.displaysOne_nmsc := Tinnik.displaysOne_nmsc
+@[deprecated (since := "2026-11-25")] alias TINNiK.exists_levels := Tinnik.exists_levels
+@[deprecated (since := "2026-11-25")] alias TINNiK.isGenericNull_centroid := Tinnik.isGenericNull_centroid
+@[deprecated (since := "2026-11-25")] alias TINNiK.noCentroidCF_of_cfDetectable := Tinnik.noCentroidCF_of_cfDetectable
+@[deprecated (since := "2026-11-25")] alias TINNiK.tendsto_good_cut := Tinnik.tendsto_good_cut
+@[deprecated (since := "2026-11-25")] alias TINNiK.tendsto_iidProb_and := Phylogenetics.tendsto_iidProb_and
+@[deprecated (since := "2026-11-25")] alias TINNiK.tendsto_star := Tinnik.tendsto_star
+@[deprecated (since := "2026-11-25")] alias TINNiK.tests_correct := Tinnik.tests_correct
+@[deprecated (since := "2026-11-25")] alias TINNiK.theorem4 := Tinnik.theorem4
+@[deprecated (since := "2026-11-25")] alias TINNiK.theorem4_explicit := Tinnik.theorem4_explicit
+@[deprecated (since := "2026-11-25")] alias TINNiK.theorem4_of_rejects := Tinnik.theorem4_of_rejects
+
+namespace TINNiK
+
+export Tinnik (NoCentroidCF Rejects)
 
 end TINNiK

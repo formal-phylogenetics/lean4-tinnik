@@ -1,8 +1,9 @@
 module
 
-public import TINNiK.Statistics.AppendixC
+public import Tinnik.AppendixC.LikelihoodRatio
 public import PhyloNetwork.ForMathlib.Probability.GaussianStrip
 public import PhyloNetwork.Testing.Defs
+public import Tinnik.Basic.Analysis.SpecialFunctions.Trigonometric.Basic
 
 /-!
 # TINNiK Appendix C.2: Proposition 6, the density of the test distribution
@@ -54,7 +55,7 @@ The strips are stated in terms of `s = sin α₀`, `c = cos α₀`, so that `cot
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped ENNReal
 
-namespace TINNiK
+namespace Tinnik
 
 namespace Prop6
 
@@ -220,13 +221,6 @@ theorem tan_pi_div_two_sub_β₀ (hα : α ∈ Ioo 0 (π / 2)) :
 theorem tan_add_β₀ (hα : α ∈ Ioo 0 (π / 2)) : tan (α + β₀ α) = (1 + sin α) / cos α := by
   rw [show α + β₀ α = π / 2 - β₀ α by simp only [β₀]; ring, tan_pi_div_two_sub_β₀ hα]
 
-/-- `-tan (π / 2 + x) = tan (π / 2 - x)`. -/
-theorem neg_tan_pi_div_two_add (x : ℝ) : -tan (π / 2 + x) = tan (π / 2 - x) := by
-  rw [show π / 2 + x = π - (π / 2 - x) by ring, tan_pi_sub, neg_neg]
-
-theorem tan_pi_div_two_sub_α (α : ℝ) : tan (π / 2 - α) = cos α / sin α := by
-  rw [tan_eq_sin_div_cos, sin_pi_div_two_sub, cos_pi_div_two_sub]
-
 /-- The sector of `G₁`. -/
 theorem sector₁ (hα : α ∈ Ioo 0 (π / 2)) :
     IsPolarSector 1 (α + β₀ α) (π / 2) ((1 + sin α) / cos α) := by
@@ -242,19 +236,19 @@ theorem sector₂ (hα : α ∈ Ioo 0 (π / 2)) :
   have hb0 := β₀_pos hα
   have hb1 := β₀_lt hα
   have h := IsPolarSector.left (b := π / 2 + β₀ α) (by linarith) (by linarith [pi_pos])
-  rwa [neg_tan_pi_div_two_add, tan_pi_div_two_sub_β₀ hα] at h
+  rwa [Real.neg_tan_pi_div_two_add, tan_pi_div_two_sub_β₀ hα] at h
 
 /-- The sector of `G₃`, in the figure rotated by `2 β₀`. -/
 theorem sector₃ (hα : α ∈ Ioo 0 (π / 2)) :
     IsPolarSector 1 (π / 2 - α) (π / 2) (cos α / sin α) := by
   have h := IsPolarSector.right (a := π / 2 - α) (by linarith [hα.2, pi_pos]) (by linarith [hα.1])
-  rwa [tan_pi_div_two_sub_α] at h
+  rwa [Real.tan_pi_div_two_sub_eq_cos_div_sin] at h
 
 /-- The sector of `G₄`, in the figure rotated by `π / 2 + α₀`. -/
 theorem sector₄ (hα : α ∈ Ioo 0 (π / 2)) :
     IsPolarSector (-1) (π / 2) (π / 2 + α) (cos α / sin α) := by
   have h := IsPolarSector.left (b := π / 2 + α) (by linarith [hα.1]) (by linarith [hα.2])
-  rwa [neg_tan_pi_div_two_add, tan_pi_div_two_sub_α] at h
+  rwa [Real.neg_tan_pi_div_two_add, Real.tan_pi_div_two_sub_eq_cos_div_sin] at h
 
 /-- The sector of `G₅`, in the figure rotated by `π / 2 + α₀`. -/
 theorem sector₅ (hα : α ∈ Ioo 0 (π / 2)) :
@@ -953,4 +947,8 @@ theorem proposition6 (φ : ℝ) (hφ : 0 < φ ∧ φ < 3 / 2) (n : ℕ) :
       lambdaLaw φ n = volume.withDensity (fun lam => ENNReal.ofReal (density φ n lam)) :=
   ⟨Prop6.density_nonneg φ n, Prop6.lambdaLaw_eq φ hφ n⟩
 
-end TINNiK
+end Tinnik
+
+/-! ### The names in the namespace `TINNiK`, which the repositories that require this one use -/
+
+@[deprecated (since := "2026-11-25")] alias TINNiK.proposition6 := Tinnik.proposition6

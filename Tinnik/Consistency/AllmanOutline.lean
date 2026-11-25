@@ -1,7 +1,7 @@
 module
 
 public import Allman2023.MainResult.Algorithm
-public import TINNiK.NJ
+public import Tinnik.Consistency.NJ
 public import PhyloNetwork.Testing.Tails
 
 /-!
@@ -10,7 +10,7 @@ public import PhyloNetwork.Testing.Tails
 Section 5 of that paper outlines an algorithm, `Allman2023.Algorithm.outline`, with a test it doesn't specify ("step 2 requires the development of a novel statistical test"), and says "Like NANUQ, it can be shown to provide a statistically consistent estimate of the network features it seeks to infer". TINNiK is the later paper that develops it. So this module is the bridge, here because the modules of the earlier paper import no later paper.
 
 * `cutReject`: the cut test at a level `α`, with the maximum likelihood topology. `outline_cut_eq_tinnik`: with this test, the outline is TINNiK's algorithm without its star test and its cutoff: `tinnik ml α β 0 M`, for any `β > 1`.
-* `outline_cut_consistent`: **the consistency of the outline for generic parameters**, from `TINNiK.theorem4`; `outline_cut_consistent_nj`, with neighbor joining in step 4. Both have a tree of blobs in the paper's form, `(Trd hN hX).splits`.
+* `outline_cut_consistent`: **the consistency of the outline for generic parameters**, from `Tinnik.theorem4`; `outline_cut_consistent_nj`, with neighbor joining in step 4. Both have a tree of blobs in the paper's form, `(Trd hN hX).splits`.
 * "This can be accomplished in time `O(n⁵)`" and "the computational time is `O((n + m) n⁴)`" are counts of operations in TINNiK's text: `stepThree_count`, `outline_operations_le`.
 -/
 
@@ -19,7 +19,7 @@ Section 5 of that paper outlines an algorithm, `Allman2023.Algorithm.outline`, w
 open Phylogenetics Phylogenetics.RootedNetwork Finset Filter Topology
 open scoped Classical
 
-namespace TINNiK
+namespace Tinnik
 
 open Allman2023 Allman2023.Algorithm
 
@@ -61,12 +61,7 @@ theorem outline_cut_eq_tinnik (ml : (QuartetTree X → ℝ) → Finset X → Qua
   simp only [outline, tinnik, stepThree, hB, hT]
   refine Finset.filter_congr fun x _ => or_congr Iff.rfl ⟨fun h => ⟨h.le, h⟩, fun h => h.2⟩
 
-omit [Fintype X] in
-theorem quartetCount_nonneg [Fintype X] {Γ : Type*} [Fintype Γ] (sides : Γ → Finset (Finset X)) {m : ℕ} (ω : Fin m → Γ) (r : QuartetTree X) : 0 ≤ quartetCount sides ω r := by
-  unfold quartetCount
-  positivity
-
-/-- **"Like NANUQ, it can be shown to provide a statistically consistent estimate of the network features it seeks to infer"** (`a:claim:outline-consistent`, Section 5). For generic numerical parameters on a binary network, there are levels `α_m → 0` of the cut test such that the outline, with any exact tree building method and any selection of maximum likelihood topologies, returns `T_rd(𝒩⁻)` on `m` independent gene trees with probability tending to one. From `TINNiK.theorem4`. -/
+/-- **"Like NANUQ, it can be shown to provide a statistically consistent estimate of the network features it seeks to infer"** (`a:claim:outline-consistent`, Section 5). For generic numerical parameters on a binary network, there are levels `α_m → 0` of the cut test such that the outline, with any exact tree building method and any selection of maximum likelihood topologies, returns `T_rd(𝒩⁻)` on `m` independent gene trees with probability tending to one. From `Tinnik.theorem4`. -/
 theorem outline_cut_consistent (hN : IsBinaryNetwork N) (hX : 4 ≤ Fintype.card X) :
     ∃ A : Set (MetricData E), N.IsGenericNull A ∧
       ∀ θ, N.IsMetric θ → θ ∉ A →
@@ -85,7 +80,7 @@ theorem outline_cut_consistent (hN : IsBinaryNetwork N) (hX : 4 ≤ Fintype.card
   refine key.congr fun m => ?_
   congr 1
   funext ω
-  rw [outline_cut_eq_tinnik ml (α m) (by norm_num : (1 : ℝ) < 2) M (quartetCount_nonneg _ ω)]
+  rw [outline_cut_eq_tinnik ml (α m) (by norm_num : (1 : ℝ) < 2) M (QuartetTests.quartetCount_nonneg ω)]
 
 /-- **The consistency of the outline with neighbor joining in step 4**: "a tree building method such as Neighbor-Joining". -/
 theorem outline_cut_consistent_nj (hN : IsBinaryNetwork N) (hX : 4 ≤ Fintype.card X) :
@@ -132,4 +127,8 @@ theorem outline_operations_le {n m : ℕ} (hn : 1 ≤ n) : tinnikOperations n m 
 
 end Counts
 
-end TINNiK
+end Tinnik
+
+/-! ### The names in the namespace `TINNiK`, which the repositories that require this one use -/
+
+@[deprecated (since := "2026-11-25")] alias TINNiK.outline_cut_consistent := Tinnik.outline_cut_consistent

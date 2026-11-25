@@ -1,17 +1,18 @@
 module
 
-public import TINNiK.Statistics.Definitions
+public import Tinnik.AppendixC.Definitions
 public import PhyloNetwork.External.MitchellAllmanRhodes2019.CutModel
 public import TreeOfBlobs.ForMathlib.Analysis.SpecialFunctions.GibbsInequality
 public import PhyloNetwork.Testing.Trinomial.Tests
 public import Mathlib.MeasureTheory.Function.ConvergenceInDistribution
 public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+public import Tinnik.Basic.Algebra.Order.Field.Basic
 
 /-!
 # TINNiK Appendix C: the cut test
 
 The maximum likelihood estimates and maximal log-likelihoods of Appendix C.1, and Proposition 5 of
-Appendix C.2 (Proposition 6 is in `src/TINNiK/Statistics/Proposition6.lean`). The maximum likelihood estimate on the cut model is over the closed simplex, as agreed
+Appendix C.2 (Proposition 6 is in `src/Tinnik/AppendixC/Proposition6.lean`). The maximum likelihood estimate on the cut model is over the closed simplex, as agreed
 with the person who asked for this formalization: on the open cut model of Definition 7 no maximum exists for counts such as `(1, 0, 0)`
 (E31 of the report). The generating parameter stays in the open simplex.
 -/
@@ -21,7 +22,7 @@ with the person who asked for this formalization: on the open cut model of Defin
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped ENNReal
 
-namespace TINNiK
+namespace Tinnik
 
 /-! ### Helpers on the lines -/
 
@@ -246,23 +247,6 @@ theorem likelihoodRatio_nonneg (m : Counts) : 0 ≤ likelihoodRatio m := by
     (le_min (Phylogenetics.Trinomial.lineS_nonneg (Nat.cast_nonneg _) (Nat.cast_nonneg _))
       (Phylogenetics.Trinomial.lineS_nonneg (Nat.cast_nonneg _) (Nat.cast_nonneg _)))
 
-/-- The closest point to `(z₁, z₂)` on the line `y = γ x`, in the proof of Proposition 5. -/
-theorem line_projection_minimizes (γ z₁ z₂ : ℝ) :
-    let x₀ := (z₁ + γ * z₂) / (1 + γ ^ 2)
-    ∀ x : ℝ, (z₁ - x₀) ^ 2 + (z₂ - γ * x₀) ^ 2 ≤ (z₁ - x) ^ 2 + (z₂ - γ * x) ^ 2 := by
-  intro x₀ x
-  have hpos : 0 < 1 + γ ^ 2 := by positivity
-  have hid : (z₁ - x) ^ 2 + (z₂ - γ * x) ^ 2 =
-      (z₁ - x₀) ^ 2 + (z₂ - γ * x₀) ^ 2 + (1 + γ ^ 2) * (x - x₀) ^ 2 := by
-    have hx₀ : (1 + γ ^ 2) * x₀ = z₁ + γ * z₂ := by
-      simp only [x₀]
-      field_simp
-    clear_value x₀
-    linear_combination (2 * x - 2 * x₀) * hx₀
-  rw [hid]
-  have : 0 ≤ (1 + γ ^ 2) * (x - x₀) ^ 2 := by positivity
-  linarith
-
 /-- The squared distance to the line `y = tan α₀ · x`, in the proof of Proposition 5. -/
 theorem line_projection_distance (φ : ℝ) (z₁ z₂ : ℝ) :
     let γ := Real.tan (alpha0 φ)
@@ -305,12 +289,12 @@ private theorem threeLineDistSq_eq_lambdaCandidate (φ : ℝ) (z : ℝ × ℝ) :
   have h₁ : lineDistSq (Real.tan (alpha0 φ)) z =
       (Real.sin (alpha0 φ) * z.1 - Real.cos (alpha0 φ) * z.2) ^ 2 := by
     unfold lineDistSq
-    rw [iInf_eq_of_minimizes (line_projection_minimizes (Real.tan (alpha0 φ)) z.1 z.2)]
+    rw [iInf_eq_of_minimizes (Real.line_projection_minimizes (Real.tan (alpha0 φ)) z.1 z.2)]
     exact line_projection_distance φ z.1 z.2
   have h₂ : lineDistSq (-Real.tan (alpha0 φ)) z =
       (Real.sin (alpha0 φ) * z.1 + Real.cos (alpha0 φ) * z.2) ^ 2 := by
     unfold lineDistSq
-    rw [iInf_eq_of_minimizes (line_projection_minimizes (-Real.tan (alpha0 φ)) z.1 z.2)]
+    rw [iInf_eq_of_minimizes (Real.line_projection_minimizes (-Real.tan (alpha0 φ)) z.1 z.2)]
     have h₃ := line_projection_distance φ (-z.1) z.2
     simp only at h₃
     have e : (-z.1 + Real.tan (alpha0 φ) * z.2) / (1 + Real.tan (alpha0 φ) ^ 2) =
@@ -332,7 +316,7 @@ variable `Λ_n = min(Z², (sin α₀ Z + cos α₀ Z̄)², (sin α₀ Z - cos α
 
 The proof is the paper's: the likelihood ratio statistic and the least squared distance from the normal
 sample `N((0, μ₀), I)` to the three lines `x = 0`, `y = ± γ₀ x` have the same limit; the distances to
-the lines are computed by the projections (`line_projection_minimizes`, `line_projection_distance`);
+the lines are computed by the projections (`Real.line_projection_minimizes`, `line_projection_distance`);
 the minimum is `Λ_n`.
 
 Departure from the paper: it takes the first step from Theorem 3.1 of Mitchell, Allman, Rhodes 2019,
@@ -373,4 +357,11 @@ theorem proposition5 (φ : ℝ) (hφ : 0 < φ ∧ φ < 3 / 2) : ∃ ν : Probabi
       rfl
     rw [hlaw]
 
-end TINNiK
+end Tinnik
+
+/-! ### The names in the namespace `TINNiK`, which the repositories that require this one use -/
+
+@[deprecated (since := "2026-11-25")] alias TINNiK.cutLineMLE_maximizes := Tinnik.cutLineMLE_maximizes
+@[deprecated (since := "2026-11-25")] alias TINNiK.fullMaxLogLikelihood_eq := Tinnik.fullMaxLogLikelihood_eq
+@[deprecated (since := "2026-11-25")] alias TINNiK.lineMaxLogLikelihood_eq := Tinnik.lineMaxLogLikelihood_eq
+@[deprecated (since := "2026-11-25")] alias TINNiK.proposition5 := Tinnik.proposition5

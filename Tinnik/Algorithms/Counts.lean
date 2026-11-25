@@ -6,7 +6,9 @@ public import PhyloNetwork.Testing.Defs
 public import TreeOfBlobs.TreeCounts
 public import Phylogenetics.Tree.Splits
 public import Phylogenetics.Network.CutHierarchy
-public import TINNiK.Basic
+public import Tinnik.Consistency.Theorem4
+public import Tinnik.Basic.Data.List.Basic
+public import Tinnik.Basic.Data.Finset.Powerset
 
 /-!
 # TINNiK: operation counts
@@ -43,7 +45,7 @@ Step 1 `O(mN⁴)`: `card_tabulation`. Step 2 `O(N⁵)`: `sum_step2_statistics` a
 open Phylogenetics Finset
 open scoped Classical
 
-namespace TINNiK
+namespace Tinnik
 
 variable {X : Type*} [Fintype X] [DecidableEq X]
 
@@ -89,15 +91,6 @@ def passStep (τ : Set (QuartetTree X)) (L₁ : List (Finset X)) (σ : InferStat
 
 /-! #### Invariants of a pass -/
 
-omit [Fintype X] [DecidableEq X] in
-/-- An invariant of a fold. -/
-theorem foldl_induction {α β : Type*} {f : α → β → α} {P : α → Prop} {l : List β}
-    (hf : ∀ a, ∀ b ∈ l, P a → P (f a b)) {a : α} (h : P a) : P (l.foldl f a) := by
-  induction l generalizing a with
-  | nil => exact h
-  | cons b l ih =>
-    exact ih (fun a' b' hb' => hf a' b' (List.mem_cons_of_mem _ hb')) (hf a b List.mem_cons_self h)
-
 /-- What a pass from the vector `B₀` keeps: `L₂` lists without repetition exactly the sets added to `B₀`. -/
 structure PassInv (B₀ : Finset (Finset X)) (σ : InferState X) : Prop where
   subset : B₀ ⊆ σ.B
@@ -113,8 +106,8 @@ theorem PassInv.init (B₀ : Finset (Finset X)) (n : ℕ) : PassInv B₀ ⟨B₀
 
 omit [Fintype X] in
 theorem PassInv.compareStep {B₀ : Finset (Finset X)} {σ : InferState X} (h : PassInv B₀ σ) (x y : Finset X) :
-    PassInv B₀ (TINNiK.compareStep τ x σ y) := by
-  unfold TINNiK.compareStep
+    PassInv B₀ (Tinnik.compareStep τ x σ y) := by
+  unfold Tinnik.compareStep
   split_ifs
   · refine ⟨h.subset.trans subset_union_left, fun t => ?_, ?_, ?_⟩
     · simp only [mem_union, List.mem_append, mem_toList, mem_sdiff]
@@ -131,12 +124,12 @@ theorem PassInv.compareStep {B₀ : Finset (Finset X)} {σ : InferState X} (h : 
   · exact ⟨h.subset, h.mem_iff, h.nodup, h.notMem⟩
 
 theorem PassInv.visitStep {B₀ : Finset (Finset X)} {σ : InferState X} (h : PassInv B₀ σ) (x : Finset X) :
-    PassInv B₀ (TINNiK.visitStep τ σ x) :=
-  foldl_induction (fun _ y _ ha => ha.compareStep x y) h
+    PassInv B₀ (Tinnik.visitStep τ σ x) :=
+  List.foldl_induction (fun _ y _ ha => ha.compareStep x y) h
 
 theorem PassInv.passStep {B₀ : Finset (Finset X)} {σ : InferState X} (h : PassInv B₀ σ) (L₁ : List (Finset X)) :
-    PassInv B₀ (TINNiK.passStep τ L₁ σ) :=
-  foldl_induction (fun _ x _ ha => ha.visitStep x) h
+    PassInv B₀ (Tinnik.passStep τ L₁ σ) :=
+  List.foldl_induction (fun _ x _ ha => ha.visitStep x) h
 
 omit [Fintype X] in
 theorem subset_B_compareStep (x y : Finset X) (σ : InferState X) : σ.B ⊆ (compareStep τ x σ y).B := by
@@ -146,11 +139,11 @@ theorem subset_B_compareStep (x y : Finset X) (σ : InferState X) : σ.B ⊆ (co
   · exact Subset.refl _
 
 theorem subset_B_visitStep (x : Finset X) (σ : InferState X) : σ.B ⊆ (visitStep τ σ x).B :=
-  foldl_induction (P := fun a : InferState X => σ.B ⊆ a.B)
+  List.foldl_induction (P := fun a : InferState X => σ.B ⊆ a.B)
     (fun a y _ ha => ha.trans (subset_B_compareStep x y a)) (Subset.refl _)
 
 theorem subset_B_passStep (L₁ : List (Finset X)) (σ : InferState X) : σ.B ⊆ (passStep τ L₁ σ).B :=
-  foldl_induction (P := fun a : InferState X => σ.B ⊆ a.B)
+  List.foldl_induction (P := fun a : InferState X => σ.B ⊆ a.B)
     (fun a x _ ha => ha.trans (subset_B_visitStep x a)) (Subset.refl _)
 
 /-- The output of Step 3: the vector `B`, the number `count` of executions of the body of Step 3(a)(i), and the number
@@ -381,7 +374,7 @@ theorem four_compareStep (hx : x.card = 4) (hy : y ∈ sharingThree x) (h : ∀ 
   · exact h
 
 theorem four_visitStep (hx : x.card = 4) (h : ∀ q ∈ σ.B, q.card = 4) : ∀ q ∈ (visitStep τ σ x).B, q.card = 4 :=
-  foldl_induction (P := fun a : InferState X => ∀ q ∈ a.B, q.card = 4)
+  List.foldl_induction (P := fun a : InferState X => ∀ q ∈ a.B, q.card = 4)
     (fun _ _ hy ha => four_compareStep hx (mem_toList.mp hy) ha) h
 
 /-- Everything `compareStep` designates is inferred by the rule of `BInferred`. -/
@@ -410,7 +403,7 @@ theorem sound_visitStep (hx : x ∈ σ.B) (hf : ∀ q ∈ σ.B, q.card = 4)
     (hs : ∀ q ∈ σ.B, BInferred (B₀ : Set (Finset X)) τ q) :
     ∀ q ∈ (visitStep τ σ x).B, BInferred (B₀ : Set (Finset X)) τ q := by
   have hxc := hf x hx
-  have := foldl_induction (l := (sharingThree x).toList) (f := compareStep τ x)
+  have := List.foldl_induction (l := (sharingThree x).toList) (f := compareStep τ x)
     (P := fun a : InferState X => x ∈ a.B ∧ (∀ q ∈ a.B, q.card = 4) ∧ ∀ q ∈ a.B, BInferred (B₀ : Set (Finset X)) τ q)
     (fun a y hy ha => ⟨subset_B_compareStep x y a ha.1, four_compareStep hxc (mem_toList.mp hy) ha.2.1,
       sound_compareStep ha.1 (mem_toList.mp hy) ha.2.1 ha.2.2⟩) (a := σ) ⟨hx, hf, hs⟩
@@ -459,7 +452,7 @@ def IsClosedOn (τ : Set (QuartetTree X)) (Done B : Finset (Finset X)) : Prop :=
 omit [Fintype X] in
 /-- The loop of Step 3(a)(i) only adds to `B`. -/
 theorem subset_B_foldl (l : List (Finset X)) (σ : InferState X) : σ.B ⊆ (l.foldl (compareStep τ x) σ).B :=
-  foldl_induction (P := fun a : InferState X => σ.B ⊆ a.B)
+  List.foldl_induction (P := fun a : InferState X => σ.B ⊆ a.B)
     (fun a y _ ha => ha.trans (subset_B_compareStep x y a)) (Subset.refl _)
 
 omit [Fintype X] in
@@ -497,13 +490,13 @@ compared again later". After visiting `x`, the pairs with `x` have had their com
 with `x` among their `otherSets` has its other sets designated because `x` was compared with `q`, and `t` is among
 `otherSets x q`. -/
 theorem IsClosedOn.visitStep {Done : Finset (Finset X)} (hcl : IsClosedOn τ Done σ.B) (hDone : Done ⊆ σ.B)
-    (hx : x ∈ σ.B) (hf : ∀ q ∈ σ.B, q.card = 4) : IsClosedOn τ (insert x Done) (TINNiK.visitStep τ σ x).B := by
+    (hx : x ∈ σ.B) (hf : ∀ q ∈ σ.B, q.card = 4) : IsClosedOn τ (insert x Done) (Tinnik.visitStep τ σ x).B := by
   have hsub := subset_B_visitStep (τ := τ) x σ
   have hxc := hf x hx
   -- a member of `insert x Done` among `otherSets x t` is in `Done`
   have hpair : ∀ t ∈ Done, (x ∩ t).card = 3 →
       ((∃ r ∈ otherSets x t, r ∈ insert x Done) ∨ HasSeparatingTree τ x t) →
-      otherSets x t ⊆ (TINNiK.visitStep τ σ x).B := by
+      otherSets x t ⊆ (Tinnik.visitStep τ σ x).B := by
     intro t ht h3 hc
     have htc := hf t (hDone ht)
     refine otherSets_subset_visitStep (mem_sharingThree.mpr ⟨htc, by rwa [inter_comm]⟩) (hDone ht) ?_
@@ -571,13 +564,13 @@ theorem IsClosedOn.visitStep {Done : Finset (Finset X)} (hcl : IsClosedOn τ Don
 /-- A pass over `L₁` extends the closed sets by `L₁`. -/
 theorem IsClosedOn.passStep {L₁ : List (Finset X)} {Done : Finset (Finset X)} (hcl : IsClosedOn τ Done σ.B)
     (hDone : Done ⊆ σ.B) (hL : ∀ x ∈ L₁, x ∈ σ.B) (hf : ∀ q ∈ σ.B, q.card = 4) :
-    IsClosedOn τ (Done ∪ L₁.toFinset) (TINNiK.passStep τ L₁ σ).B := by
+    IsClosedOn τ (Done ∪ L₁.toFinset) (Tinnik.passStep τ L₁ σ).B := by
   induction L₁ generalizing Done σ with
   | nil =>
-    simpa [TINNiK.passStep] using hcl
+    simpa [Tinnik.passStep] using hcl
   | cons x L ih =>
     have hx : x ∈ σ.B := hL x List.mem_cons_self
-    have h := ih (Done := insert x Done) (σ := TINNiK.visitStep τ σ x) (hcl.visitStep hDone hx hf)
+    have h := ih (Done := insert x Done) (σ := Tinnik.visitStep τ σ x) (hcl.visitStep hDone hx hf)
       (insert_subset (subset_B_visitStep x σ hx) (hDone.trans (subset_B_visitStep x σ)))
       (fun z hz => subset_B_visitStep x σ (hL z (List.mem_cons_of_mem _ hz))) (four_visitStep (hf x hx) hf)
     have heq : Done ∪ (x :: L).toFinset = insert x Done ∪ L.toFinset := by
@@ -712,24 +705,17 @@ theorem count_bQuartetInference (hB₀ : ∀ q ∈ B₀, q.card = 4) (τ : Set (
     (bQuartetInference B₀ τ).count = 4 * (Fintype.card X - 4) * (bQuartetInference B₀ τ).B.card :=
   (bQuartetInference_spec hB₀ τ).2.2.2.2.1
 
-omit [DecidableEq X] in
-/-- The B-quartets are at most `C(N, 4)`. -/
-theorem card_le_choose_of_forall_card {S : Finset (Finset X)} (hS : ∀ q ∈ S, q.card = 4) :
-    S.card ≤ (Fintype.card X).choose 4 := by
-  have : S ⊆ powersetCard 4 univ := fun q hq => mem_powersetCard.mpr ⟨subset_univ q, hS q hq⟩
-  simpa [card_powersetCard] using card_le_card this
-
 /-- All passes of Step 3 execute the body of Step 3(a)(i) at most `4 (N - 4) C(N, 4)` times: the paper's `O(N⁵)`. -/
 theorem count_bQuartetInference_le (hB₀ : ∀ q ∈ B₀, q.card = 4) (τ : Set (QuartetTree X)) :
     (bQuartetInference B₀ τ).count ≤ 4 * (Fintype.card X - 4) * (Fintype.card X).choose 4 := by
   rw [count_bQuartetInference hB₀]
-  exact Nat.mul_le_mul_left _ (card_le_choose_of_forall_card (bQuartetInference_spec hB₀ τ).2.2.2.1)
+  exact Nat.mul_le_mul_left _ (card_le_choose_of_forall_card_eq_four (bQuartetInference_spec hB₀ τ).2.2.2.1)
 
 /-- Step 3(a) runs at most `C(N, 4) + 1` times: each pass but the last has entries, and these are not repeated. -/
 theorem passes_bQuartetInference_le (hB₀ : ∀ q ∈ B₀, q.card = 4) (τ : Set (QuartetTree X)) :
     (bQuartetInference B₀ τ).passes ≤ (Fintype.card X).choose 4 + 1 :=
   (bQuartetInference_spec hB₀ τ).2.2.2.2.2.trans
-    (Nat.add_le_add_right (card_le_choose_of_forall_card (bQuartetInference_spec hB₀ τ).2.2.2.1) 1)
+    (Nat.add_le_add_right (card_le_choose_of_forall_card_eq_four (bQuartetInference_spec hB₀ τ).2.2.2.1) 1)
 
 variable {ml : (QuartetTree X → ℝ) → Finset X → QuartetTree X} {α β : ℝ} {c : QuartetTree X → ℝ}
 
@@ -873,4 +859,12 @@ theorem tinnikOperations_le {N m nj c : ℕ} (hN : 1 ≤ N) (hnj : nj ≤ c * N 
 
 end Steps
 
-end TINNiK
+end Tinnik
+
+/-! ### The names in the namespace `TINNiK`, which the repositories that require this one use -/
+
+@[deprecated (since := "2026-11-25")] alias TINNiK.card_fourSets := Tinnik.card_fourSets
+@[deprecated (since := "2026-11-25")] alias TINNiK.card_quartetTree := Tinnik.card_quartetTree
+@[deprecated (since := "2026-11-25")] alias TINNiK.card_tabulation := Tinnik.card_tabulation
+@[deprecated (since := "2026-11-25")] alias TINNiK.sum_distance_incidences := Tinnik.sum_distance_incidences
+@[deprecated (since := "2026-11-25")] alias TINNiK.sum_step2_statistics := Tinnik.sum_step2_statistics

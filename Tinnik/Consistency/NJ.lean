@@ -7,15 +7,15 @@ public import PhyloNetwork.Testing.Defs
 public import PhyloNetwork.Testing.IID
 public import Phylogenetics.Tree.NeighborJoining
 public import Phylogenetics.Network.CutHierarchy
-public import TINNiK.Basic
-public import TINNiK.Counts
+public import Tinnik.Consistency.Theorem4
+public import Tinnik.Algorithms.Counts
 
 /-!
 # TINNiK with neighbor joining
 
 TINNiK's Theorem 4 for the distance-based method that the paper names in step 4 of the algorithm
 (TINNiK's text, line 194), neighbor joining, with any way of breaking ties: `theorem4_nj` and
-`theorem4_explicit_nj`, instances of `TINNiK.theorem4` and `TINNiK.theorem4_explicit` by
+`theorem4_explicit_nj`, instances of `Tinnik.theorem4` and `Tinnik.theorem4_explicit` by
 `Phylogenetics.NJ.isExactBuilder_nj`. The paper's step 4 takes `O(N³)` (line 196):
 `Phylogenetics.NJ.ops_run`, `Phylogenetics.NJ.njOps_le`.
 -/
@@ -25,7 +25,7 @@ TINNiK's Theorem 4 for the distance-based method that the paper names in step 4 
 open Phylogenetics Phylogenetics.RootedNetwork Filter Topology
 open scoped Classical
 
-namespace TINNiK
+namespace Tinnik
 
 variable {V E X : Type*} [Fintype X] [DecidableEq X]
 
@@ -67,4 +67,9 @@ theorem tinnikOperations_nj_le {N m : ℕ} (hN : 1 ≤ N) :
     tinnikOperations N m (NJ.njOps N) ≤ (68 + 8) * ((m + N) * N ^ 4) :=
   tinnikOperations_le hN (NJ.njOps_le N)
 
-end TINNiK
+end Tinnik
+
+/-! ### The names in the namespace `TINNiK`, which the repositories that require this one use -/
+
+@[deprecated (since := "2026-11-25")] alias TINNiK.theorem4_nj := Tinnik.theorem4_nj
+@[deprecated (since := "2026-11-25")] alias TINNiK.tinnikOperations_nj_le := Tinnik.tinnikOperations_nj_le

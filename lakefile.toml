@@ -1,8 +1,8 @@
-name = "TINNiK"
+name = "Tinnik"
 version = "0.1.0"
 keywords = ["math", "phylogenetics"]
 description = "A Lean 4 formalization of TINNiK (Allman, Baños, Mitchell, Rhodes 2024)"
-defaultTargets = ["TINNiK"]
+defaultTargets = ["Tinnik"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -38,7 +38,13 @@ name = "mathlib"
 scope = "leanprover-community"
 rev = "v4.37.0-rc1"
 
-# Every module of this repository is under TINNiK/ (lean4-phylogenetics, docs/CONVENTIONS.md).
+# Every module of the project is in Tinnik/, but its Challenge and its Solution, which are in
+# palomar/ (lean4-phylogenetics, docs/CONVENTIONS.md, Sections 2 and 3). Lake fails on a glob whose
+# directory, or a root whose file, does not exist.
+
+# The paper's library, in the namespace Tinnik: general mathematics in Tinnik/Basic/, the results
+# the paper cites in Tinnik/External/, the definitions of the Challenge in Tinnik/Defs.lean, and the
+# paper's sections.
 [[lean_lib]]
-name = "TINNiK"
-globs = ["TINNiK.+"]
+name = "Tinnik"
+globs = ["Tinnik.+"]

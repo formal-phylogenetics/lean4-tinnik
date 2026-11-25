@@ -6,6 +6,7 @@ public import Mathlib.Data.Finset.Sort
 public import Mathlib.Order.Interval.Finset.Nat
 public import Mathlib.Tactic.FinCases
 public import Mathlib.Tactic.Ring
+public import Tinnik.Basic.Data.Nat.Choose.Basic
 
 /-!
 # TINNiK: the index of a set of four taxa
@@ -24,7 +25,7 @@ computed in time `O(1)`."
 open Finset
 open scoped Classical
 
-namespace TINNiK
+namespace Tinnik
 
 /-- The formula for the index of the set `{a, b, c, d}`, `1 ≤ a < b < c < d ≤ N`. -/
 def rho (N a b c d : ℕ) : ℕ :=
@@ -32,31 +33,6 @@ def rho (N a b c d : ℕ) : ℕ :=
 
 /-- The sum subtracted in the formula. -/
 def rhoSum (N a b c d : ℕ) : ℕ := (N - a).choose 4 + (N - b).choose 3 + (N - c).choose 2 + (N - d).choose 1
-
-/-- Pascal's rule, down to the last term: `C(x + 4, 4) = C(x + 3, 4) + C(x + 2, 3) + C(x + 1, 2) + C(x, 1) + 1`. -/
-theorem choose_four_eq (x : ℕ) :
-    (x + 4).choose 4 = (x + 3).choose 4 + (x + 2).choose 3 + (x + 1).choose 2 + x.choose 1 + 1 := by
-  have h₁ : (x + 4).choose 4 = (x + 3).choose 3 + (x + 3).choose 4 := Nat.choose_succ_succ (x + 3) 3
-  have h₂ : (x + 3).choose 3 = (x + 2).choose 2 + (x + 2).choose 3 := Nat.choose_succ_succ (x + 2) 2
-  have h₃ : (x + 2).choose 2 = (x + 1).choose 1 + (x + 1).choose 2 := Nat.choose_succ_succ (x + 1) 1
-  have h₄ : (x + 1).choose 1 = x + 1 := Nat.choose_one_right _
-  have h₅ : x.choose 1 = x := Nat.choose_one_right _
-  omega
-
-/-- `C(x + 3, 3) = C(x + 2, 3) + C(x + 1, 2) + C(x, 1) + 1`. -/
-theorem choose_three_eq (x : ℕ) : (x + 3).choose 3 = (x + 2).choose 3 + (x + 1).choose 2 + x.choose 1 + 1 := by
-  have h₂ : (x + 3).choose 3 = (x + 2).choose 2 + (x + 2).choose 3 := Nat.choose_succ_succ (x + 2) 2
-  have h₃ : (x + 2).choose 2 = (x + 1).choose 1 + (x + 1).choose 2 := Nat.choose_succ_succ (x + 1) 1
-  have h₄ : (x + 1).choose 1 = x + 1 := Nat.choose_one_right _
-  have h₅ : x.choose 1 = x := Nat.choose_one_right _
-  omega
-
-/-- `C(x + 2, 2) = C(x + 1, 2) + C(x, 1) + 1`. -/
-theorem choose_two_eq (x : ℕ) : (x + 2).choose 2 = (x + 1).choose 2 + x.choose 1 + 1 := by
-  have h₃ : (x + 2).choose 2 = (x + 1).choose 1 + (x + 1).choose 2 := Nat.choose_succ_succ (x + 1) 1
-  have h₄ : (x + 1).choose 1 = x + 1 := Nat.choose_one_right _
-  have h₅ : x.choose 1 = x := Nat.choose_one_right _
-  omega
 
 /-- The lexicographic order on words. -/
 def LexLT (w w' : ℕ × ℕ × ℕ × ℕ) : Prop :=
@@ -77,7 +53,7 @@ theorem rhoSum_lt_rhoSum {N : ℕ} {w w' : ℕ × ℕ × ℕ × ℕ} (hw : IsWor
   rcases h with h | ⟨rfl, h | ⟨rfl, h | ⟨rfl, h⟩⟩⟩
   · -- the first entry differs
     obtain ⟨x, hx⟩ : ∃ x, N - a = x + 4 := ⟨N - a - 4, by omega⟩
-    have e := choose_four_eq x
+    have e := Nat.add_four_choose_four_eq x
     have m₁ : (N - a').choose 4 ≤ (x + 3).choose 4 := mono (by omega)
     have m₂ : (N - b').choose 3 ≤ (x + 2).choose 3 := mono (by omega)
     have m₃ : (N - c').choose 2 ≤ (x + 1).choose 2 := mono (by omega)
@@ -85,14 +61,14 @@ theorem rhoSum_lt_rhoSum {N : ℕ} {w w' : ℕ × ℕ × ℕ × ℕ} (hw : IsWor
     rw [hx]
     omega
   · obtain ⟨x, hx⟩ : ∃ x, N - b = x + 3 := ⟨N - b - 3, by omega⟩
-    have e := choose_three_eq x
+    have e := Nat.add_three_choose_three_eq x
     have m₂ : (N - b').choose 3 ≤ (x + 2).choose 3 := mono (by omega)
     have m₃ : (N - c').choose 2 ≤ (x + 1).choose 2 := mono (by omega)
     have m₄ : (N - d').choose 1 ≤ x.choose 1 := mono (by omega)
     rw [hx]
     omega
   · obtain ⟨x, hx⟩ : ∃ x, N - c = x + 2 := ⟨N - c - 2, by omega⟩
-    have e := choose_two_eq x
+    have e := Nat.add_two_choose_two_eq x
     have m₃ : (N - c').choose 2 ≤ (x + 1).choose 2 := mono (by omega)
     have m₄ : (N - d').choose 1 ≤ x.choose 1 := mono (by omega)
     rw [hx]
@@ -105,7 +81,7 @@ theorem rhoSum_lt_rhoSum {N : ℕ} {w w' : ℕ × ℕ × ℕ × ℕ} (hw : IsWor
 /-- The first word has index `1`. -/
 theorem rhoSum_first {N : ℕ} (hN : 4 ≤ N) : rhoSum N 1 2 3 4 + 1 = N.choose 4 := by
   obtain ⟨x, rfl⟩ : ∃ x, N = x + 4 := ⟨N - 4, by omega⟩
-  have e := choose_four_eq x
+  have e := Nat.add_four_choose_four_eq x
   simp only [rhoSum, show x + 4 - 1 = x + 3 by omega, show x + 4 - 2 = x + 2 by omega, show x + 4 - 3 = x + 1 by omega,
     show x + 4 - 4 = x by omega]
   omega
@@ -281,4 +257,4 @@ theorem rho_reads (N a b c d : ℕ) :
   simp only [binomialIndices, mem_product, mem_range]
   rcases hr with rfl | rfl | rfl | rfl | rfl <;> simp <;> omega
 
-end TINNiK
+end Tinnik

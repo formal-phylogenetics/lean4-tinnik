@@ -27,7 +27,7 @@ numbers or original author TeX labels. Assigned labels use the prefix `tinnik:`.
 open scoped BigOperators ENNReal Topology
 open MeasureTheory ProbabilityTheory Filter
 
-namespace TINNiK
+namespace Tinnik
 
 noncomputable section
 
@@ -235,5 +235,14 @@ noncomputable def density (φ : ℝ) (n : ℕ) (lam : ℝ) : ℝ :=
   else 0
 
 end
+
+end Tinnik
+
+/-! ### The names in the namespace `TINNiK`, which the repositories that require this one use -/
+
+
+namespace TINNiK
+
+export Tinnik (Counts)
 
 end TINNiK

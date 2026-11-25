@@ -1,6 +1,6 @@
 module
 
-public import TINNiK.Statistics.AppendixC
+public import Tinnik.AppendixC.LikelihoodRatio
 
 /-!
 # TINNiK Appendix C.1: the maximum likelihood estimate on the open cut model
@@ -19,7 +19,7 @@ paper is affected.
 
 @[expose] public noncomputable section
 
-namespace TINNiK
+namespace Tinnik
 
 private lemma add_one_ne_self (i : Fin 3) : i + 1 ≠ i := by
   revert i
@@ -128,4 +128,8 @@ theorem not_exists_generatingCutModel_maximizer_one_zero_zero :
   rw [h]
   exact not_exists_generatingCutModel_maximizer 0 one_pos
 
-end TINNiK
+end Tinnik
+
+/-! ### The names in the namespace `TINNiK`, which the repositories that require this one use -/
+
+@[deprecated (since := "2026-11-25")] alias TINNiK.not_exists_generatingCutModel_maximizer := Tinnik.not_exists_generatingCutModel_maximizer

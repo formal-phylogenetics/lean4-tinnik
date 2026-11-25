@@ -1,7 +1,7 @@
 module
 
 public import PhyloNetwork.Testing.MissingTaxa
-public import TINNiK.T3
+public import Tinnik.Consistency.T3
 
 /-!
 # TINNiK with gene trees that have missing taxa
@@ -36,7 +36,7 @@ nothing else changes. Three things are claimed or implied.
 open Phylogenetics Phylogenetics.RootedNetwork Finset Filter Topology
 open scoped Classical
 
-namespace TINNiK
+namespace Tinnik
 
 variable {V E X : Type*} [Fintype X] [DecidableEq X]
 
@@ -396,7 +396,7 @@ theorem exists_levels_t3_on [Nonempty X] (hN : N.IsPhylogenetic) (hθ : N.IsMetr
     exact tendsto_iidProb_of_imp hd (Eventually.of_forall fun m ω hω s hs => (hω s hs).trans_le (hle m q hq)) h
 
 /-- Levels known in advance: if `log α_m` is small against the number of gene trees containing each set of four taxa, the cut test rejects. With all
-taxa on all gene trees this is `TINNiK.rejects_of_log`. -/
+taxa on all gene trees this is `Tinnik.rejects_of_log`. -/
 theorem rejectsOn_of_log [Nonempty X] (hN : N.IsPhylogenetic) (hθ : N.IsMetric θ) (hρ : 0 ≤ ρ ∧ ρ ≤ 1)
     (hdet : Allman2023.CFDetectable N (nmscCF N θ ρ)) (hon : Covers on) {α : ℕ → ℝ} (hα : ∀ m, 0 < α m)
     (hαlog : ∀ q : Finset X, q.card = 4 → Tendsto (fun m => Real.log (α m) / (coverCount (on m) q : ℕ)) atTop (𝓝 0)) :
@@ -505,5 +505,21 @@ theorem theorem4T3_missing (hN : N.IsPhylogenetic) (hX : 4 ≤ Fintype.card X) (
   exact tinnikOf_eq_of_goodOn hN hX hδ₂ hM fun q hq => hω ⟨q, hq⟩
 
 end Sample
+
+end Tinnik
+
+/-! ### The names in the namespace `TINNiK`, which the repositories that require this one use -/
+
+@[deprecated (since := "2026-11-25")] alias TINNiK.mem_testedB_of_coverCount_eq_one := Tinnik.mem_testedB_of_coverCount_eq_one
+@[deprecated (since := "2026-11-25")] alias TINNiK.starPValue_of_forall_eq_zero := Tinnik.starPValue_of_forall_eq_zero
+@[deprecated (since := "2026-11-25")] alias TINNiK.tendsto_chiSqTwoTail_comp := Tinnik.tendsto_chiSqTwoTail_comp
+@[deprecated (since := "2026-11-25")] alias TINNiK.theorem4_missing := Tinnik.theorem4_missing
+@[deprecated (since := "2026-11-25")] alias TINNiK.theorem4_missing_of_cfDetectable := Tinnik.theorem4_missing_of_cfDetectable
+@[deprecated (since := "2026-11-25")] alias TINNiK.theorem4_missing_of_rejects := Tinnik.theorem4_missing_of_rejects
+@[deprecated (since := "2026-11-25")] alias TINNiK.theorem4T3_missing := Tinnik.theorem4T3_missing
+
+namespace TINNiK
+
+export Tinnik (Covers)
 
 end TINNiK
