@@ -7,9 +7,9 @@ the equations but is not the authors' original TeX source. "Line N", or "TINNiK'
 text of that XML, one line per paragraph, as lean4-phylo-tree-of-blobs's [`docs/CONFIGURATION.md`](https://github.com/formal-phylogenetics/lean4-phylo-tree-of-blobs/blob/05a024a837076455c700e5d0f88637aa22432b45/docs/CONFIGURATION.md) defines it. Section
 and result numbers are the paper's.
 
-This paper is one of the four of the hub
-[lean4-phylo-tree-of-blobs](https://github.com/formal-phylogenetics/lean4-phylo-tree-of-blobs), a
-sub-hub of [lean4-phylo-network](https://github.com/formal-phylogenetics/lean4-phylo-network). The
+This paper is one of the papers on the tree of blobs of the hub
+[lean4-phylo-network](https://github.com/formal-phylogenetics/lean4-phylo-network), which share the
+library of [lean4-phylo-tree-of-blobs](https://github.com/formal-phylogenetics/lean4-phylo-tree-of-blobs). The
 findings are numbered across the collection, and this report keeps those numbers: E29–E33, E40 and
 E75 on the paper, E82 on Mitchell et al. 2019, a source it uses, and E34 for the typos.
 
